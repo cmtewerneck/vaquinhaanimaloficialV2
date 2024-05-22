@@ -1,0 +1,63 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+  </ngx-spinner>
+  
+  <main class="main">
+    <!-- donation start-->
+    <section class="section donation" style="padding-bottom: 50px;"><img class="donation__bg" src="assets/img/donation_img.png" alt="img"/>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="donation-item">
+              <div class="donation-item__img"><img class="img--bg" src="{{ imagens }}{{ artigo.foto_capa }}" alt="img"/></div>
+              <div class="donation-item__body">
+                <div class="row">
+                  <div class="col-12" style="text-align: center;">
+                    <h5 class="donation-item__title" style="font-size: 40px;">{{ artigo.titulo }}</h5>
+                    <p style="text-align: center; margin-top: 40px;">{{ artigo.resumo }}</p>
+                    <p style="text-align: center; margin-top: 40px; font-size: 12px;">Escrito por {{ artigo.escrito_por }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- donation end-->
+    
+    
+    <section  class="section" style="padding-top: 60px;">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="row" style="margin-bottom: 30px;">
+              <div class="col-12">
+                <h5 class="donation-item__title" style="text-align: center; margin-bottom: 20px;">Leitura Completa</h5>
+              </div>
+            </div>
+            <!-- cause details tabs start-->
+            <div class="tabs horizontal-tabs cause-details-tabs">
+              <div class="horizontal-tabs__content">
+                <div class="horizontal-tabs__item" id="horizontal-tabs__item-1">
+                  <div class="container">
+                    <div class="row" style="text-align: justify;">
+                      <div [innerHTML]="artigo.html" style="text-align: justify;"></div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <!-- cause details tabs end-->
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px;">
+            <a class="form__submit" href="javascript:history.back()">Voltar aos artigos</a>
+        </div>
+        
+      </div>
+    </section>
+    
+  </main>

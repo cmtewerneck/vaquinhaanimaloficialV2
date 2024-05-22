@@ -1,0 +1,168 @@
+<!-- header end-->
+<main class="main">
+    <section class="promo-primary">
+        <picture>
+            <source srcset="assets/img/contacts.jpg" media="(min-width: 992px)" /><img class="img--bg" src="assets/img/contacts.jpg" alt="img" />
+        </picture>
+        <div class="promo-primary__description" style="bottom: 10px;"> <span>Contato</span></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="align-container">
+                        <div class="align-container__item"><span class="promo-primary__pre-title">Fale</span>
+                            <h1 class="promo-primary__title"><span>Conosco</span></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- section start-->
+    <section class="section contacts">
+        <div class="container">
+            <div class="row offset-margin">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="icon-item">
+                        <div class="icon-item__img"><img class="img--layout" src="assets/img/icon_2-2.png" alt="img" />
+                            <svg class="icon icon-item__icon icon--orange">
+                <use xlink:href="#phone-call"></use>
+              </svg>
+                        </div>
+                        <div class="icon-item__text">
+                            <p><a class="icon-item__link" href="tel:+31859644725">+55 21 77777-7878</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="icon-item">
+                        <div class="icon-item__img"><img class="img--layout" src="assets/img/icon_3-3.png" alt="img" />
+                            <svg class="icon icon-item__icon icon--green">
+                <use xlink:href="#envelope"></use>
+              </svg>
+                        </div>
+                        <div class="icon-item__text">
+                            <p><a class="icon-item__link" href="mailto:contato@vaquinhaanimal.com.br">contato&#64;vaquinhaanimal.com.br</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="icon-item">
+                        <div class="icon-item__img"><img class="img--layout" src="assets/img/icon_4-4.png" alt="img" />
+                            <svg class="icon icon-item__icon icon--blue">
+                <use xlink:href="#share"></use>
+              </svg>
+                        </div>
+                        <div class="icon-item__text">
+                            <!-- socials start-->
+                            <ul class="socials">
+                                <li class="socials__item"><a class="socials__link" href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                                <li class="socials__item"><a class="socials__link" href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+                                <li class="socials__item"><a class="socials__link socials__link--active" href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                <li class="socials__item"><a class="socials__link" href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                            </ul>
+                            <!-- socials end-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- section end-->
+    <!-- contacts start-->
+    <section class="section contacts no-padding-top">
+        <div class="contacts-wrapper">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-6">
+                        <form class="form message-form" [formGroup]="contactForm" autocomplete="on">
+                            <h6 class="form__title">Mande a sua dúvida</h6><span class="form__text">* campos obrigatórios</span>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input class="form__field" style="margin-bottom: 0;" formControlName="nome" placeholder="Nome *" required="required" />
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('nome')?.hasError('required') && this.contactForm.get('nome')?.touched">
+                                        * Campo obrigatório
+                                    </div>
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('nome')?.hasError('minlength') && this.contactForm.get('nome')?.touched">
+                                        Mínimo 2 caracteres
+                                    </div>
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('nome')?.hasError('maxlength') && this.contactForm.get('nome')?.touched">
+                                        Máximo 64 caracteres
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 space-top-input">
+                                    <input class="form__field" style="margin-bottom: 0;" formControlName="sobrenome" placeholder="Sobrenome *" required="required" />
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('sobrenome')?.hasError('required') && this.contactForm.get('sobrenome')?.touched">
+                                        * Campo obrigatório
+                                    </div>
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('sobrenome')?.hasError('minlength') && this.contactForm.get('sobrenome')?.touched">
+                                        Mínimo 5 caracteres
+                                    </div>
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('sobrenome')?.hasError('maxlength') && this.contactForm.get('sobrenome')?.touched">
+                                        Máximo 64 caracteres
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-top: 20px;">
+                                <div class="col-lg-6">
+                                    <input class="form__field" style="margin-bottom: 0;" type="email" formControlName="email" placeholder="E-mail *" required="required" />
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('email')?.hasError('required') && this.contactForm.get('email')?.touched">
+                                        * Campo obrigatório
+                                    </div>
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('email')?.hasError('minlength') && this.contactForm.get('email')?.touched">
+                                        Mínimo 5 caracteres
+                                    </div>
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('email')?.hasError('maxlength') && this.contactForm.get('email')?.touched">
+                                        Máximo 64 caracteres
+                                    </div>
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('email')?.hasError('email') && this.contactForm.get('email')?.touched">
+                                        Formato inválido
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 space-top-input">
+                                    <input class="form__field" style="margin-bottom: 0;" formControlName="celular" placeholder="Celular" />
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-top: 20px;">
+                                <div class="col-lg-12">
+                                    <textarea class="form__message form__field" style="margin-bottom: 0;" formControlName="mensagem" placeholder="Mensagem *" cols="40" rows="10" maxlength="500"></textarea>
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('mensagem')?.hasError('required') && this.contactForm.get('mensagem')?.touched">
+                                        * Campo obrigatório
+                                    </div>
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('mensagem')?.hasError('minlength') && this.contactForm.get('mensagem')?.touched">
+                                        Mínimo 10 caracteres
+                                    </div>
+                                    <div class="text-danger alertFormError" *ngIf="this.contactForm.get('mensagem')?.hasError('maxlength') && this.contactForm.get('mensagem')?.touched">
+                                        Máximo 500 caracteres
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BOTÕES -->
+                            <div class="col-12" style="text-align: center; margin-top: 30px;">
+                                <button class="form__submit" (click)="sendMessage()" [disabled]="!contactForm.valid" [ngStyle]="{'background-color': !contactForm.valid ? '#D3D3D3' : ''}">Enviar</button>
+                                <button class="form__submit" (click)="resetForm()" style="margin-left: 10px;">Limpar</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- contacts end-->
+    <!-- bottom bg start-->
+    <section class="bottom-background">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="bottom-background__img"><img src="assets/img/bottom-bg.png" alt="img" /></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- bottom bg end-->
+</main>

@@ -1,0 +1,1747 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+    <section class="promo-primary">
+        <picture>
+            <source srcset="assets/img/cause_details.png" media="(min-width: 992px)" /><img class="img--bg" src="assets/img/cause_details.png" alt="img" />
+            <!-- <source srcset="assets/img/cause_details.jpg" media="(min-width: 992px)"/><img class="img--bg" src="assets/img/cause_details.jpg" alt="img"/> -->
+        </picture>
+        <div class="promo-primary__description" style="bottom: 15px;"> <span>Ajude</span></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="align-container">
+                        <div class="align-container__item"><span class="promo-primary__pre-title">Detalhes da campanha</span>
+                            <h1 class="promo-primary__title"><span>{{ campanha.titulo }}</span></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- donation start-->
+    <section class="section donation" style="padding-bottom: 50px;"><img class="donation__bg" src="assets/img/donation_img.png" alt="img" />
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="donation-item">
+                        <div class="donation-item__img" *ngIf="campanha.imagens.length != 0"><img class="img--bg" style="object-fit: fill;" src="{{ imagens }}{{ campanha.imagens[0].arquivo }}" alt="img" /></div>
+                        <div class="donation-item__img" *ngIf="campanha.imagens.length == 0"><img class="img--bg" src="assets/img/noImage.png" alt="img" /></div>
+                        <div class="donation-item__body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5 class="donation-item__title">Dados da Campanha</h5>
+                                </div>
+                            </div>
+                            <div class="row align-items-end">
+                                <div class="col-lg-7">
+                                    <div class="progress-bar">
+                                        <div class="progress-bar__inner" [ngStyle]="{width: getWidth(campanha.percentual_arrecadado!)}">
+                                            <div class="progress-bar__value">{{campanha.percentual_arrecadado!}}%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="donation-item__details-holder">
+                                        <div class="donation-item__details-item"><span>Objetivo: </span><span>{{ campanha.valor_desejado | currency }}</span></div>
+                                        <div class="donation-item__details-item"><span>Arrecadado: </span><span>{{ campanha.total_arrecadado | currency }}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DOAÇÃO PADRÃO -->
+                            <div *ngIf="queroDoarToggle" class="form donation-form">
+
+                                <!-- METODO DE PAGAMENTO -->
+                                <div class="row margin-bottom">
+                                    <div class="col-12">
+                                        <h6 class="form__title">Método de Pagamento</h6>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form__radio-label"><img class="form__label-img" src="assets/img/pix.png" alt="pix"/>
+                        <input class="form__input-radio" type="radio" name="method-select" value="pix" (change)="paymentMethodSelected($event)"/><span class="form__radio-mask form__radio-mask"></span>
+                      </label>
+                                        <label class="form__radio-label"><img class="form__label-img" src="assets/img/boleto.png" alt="boleto"/>
+                        <input class="form__input-radio" type="radio" name="method-select" value="billing" (change)="paymentMethodSelected($event)"/><span class="form__radio-mask form__radio-mask"></span>
+                      </label>
+                                        <label class="form__radio-label"><img class="form__label-img" src="assets/img/visa.png" alt="cartao"/>
+                        <input class="form__input-radio" type="radio" name="method-select" value="credit_card" (change)="paymentMethodSelected($event)"/><span class="form__radio-mask form__radio-mask"></span>
+                      </label>
+                                    </div>
+                                </div>
+
+                                <!-- FORMULÁRIO BOLETO NÃO LOGADO (pronto) -->
+                                <form *ngIf="payment_method_toggle == 'billing' && !userLogado" class="form donation-form" [formGroup]="boletoForm" autocomplete="on">
+                                    <div formArrayName="items" *ngFor="let item of itemsBoletoArray.controls; let i = index">
+
+                                        <div class="row align-items-baseline margin-bottom" [formGroupName]="i">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Faça sua doação em Boleto</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="amount"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'boleto')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'boleto')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'boleto')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'boleto')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'boleto')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- DOACAO PRA PLATAFORMA -->
+                                    <div class="row align-items-baseline margin-bottom" [formGroup]="boletoForm">
+                                        <div class="col-12" style="margin-bottom: 20px;">
+                                            <h5 class="donation-item__title">Direcione um valor para a plataforma</h5>
+                                        </div>
+
+                                        <!-- VALOR A DOAR -->
+                                        <div class="col-lg-5 col-xl-6">
+                                            <label class="form__label"><span class="form__icon">R$</span>
+                          <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="valorPlataforma"/>
+                        </label>
+                                        </div>
+
+                                        <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                        <div class="col-lg-7 col-xl-6 text-lg-right">
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'boletoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'boletoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'boletoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'boletoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'boletoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- DADOS PARA PAGAMENTO -->
+                                    <div class="row" [formGroup]="customerForm" autocomplete="on">
+                                        <div class="col-12">
+                                            <h6 class="form__title">Dados de Pagamento</h6>
+                                        </div>
+
+                                        <div class="col-lg-3 margin-30">
+                                            <input class="form__field" type="text" formControlName="name" placeholder="Nome Completo *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('name')?.hasError('required') && this.customerForm.get('name')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('name')?.hasError('maxlength') && this.customerForm.get('name')?.touched">
+                                                Máximo 64 caracteres
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 margin-30">
+                                            <input class="form__field" type="email" formControlName="email" placeholder="E-mail *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('required') && this.customerForm.get('email')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('maxlength') && this.customerForm.get('email')?.touched">
+                                                Máximo 64 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('email') && this.customerForm.get('email')?.touched">
+                                                Formato inválido
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 margin-30">
+                                            <select class="form__field" formControlName="type" style="color: #6e6e6e; margin-bottom: 0;" required="required" (change)="documentSelected($event)">
+                          <option value="" disabled selected hidden>Tipo de Documento *</option>
+                          <option value="individual">CPF</option>
+                          <option value="company">CNPJ</option>
+                        </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('type')?.hasError('required') && this.customerForm.get('type')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 margin-30">
+                                            <input class="form__field" style="margin-bottom: 0;" mask={{document_mask}} formControlName="document" placeholder="Documento *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('required') && this.customerForm.get('document')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('minlength') && this.customerForm.get('document')?.touched">
+                                                Mínimo 11 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('maxlength') && this.customerForm.get('document')?.touched">
+                                                Máximo 14 caracteres
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div #divRecaptcha id="recaptcha"></div>
+
+                                    <!-- BOTOES -->
+                                    <div style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit__success" style="margin-top: 10px;" type="submit" (click)="realizarDoacaoBoleto()" [disabled]="!boletoForm.valid" [ngStyle]="{'background-color': !boletoForm.valid ? '#D3D3D3' : ''}">+ Confirmar Doação</button>
+                                        <button class="form__submit__danger inlineBtns" type="submit" style="margin-top: 10px;" (click)="naoQueroDoarBoleto()">- Cancelar</button>
+                                    </div>
+
+                                    <!-- <div>
+                      {{this.boletoForm.value|json}}
+                    </div> -->
+                                </form>
+
+                                <!-- FORMULÁRIO BOLETO LOGADO (pronto) -->
+                                <form *ngIf="payment_method_toggle == 'billing' && userLogado" class="form donation-form" [formGroup]="boletoUserLogadoForm" autocomplete="on">
+
+                                    <div formArrayName="items" *ngFor="let item of itemsBoletoUserLogadoArray.controls; let i = index">
+
+                                        <div class="row align-items-baseline margin-bottom" [formGroupName]="i">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Faça sua doação em Boleto</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="amount"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'boletoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'boletoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'boletoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'boletoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'boletoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- DOACAO PRA PLATAFORMA -->
+                                    <div class="row align-items-baseline margin-bottom" [formGroup]="boletoUserLogadoForm">
+                                        <div class="col-12" style="margin-bottom: 20px;">
+                                            <h5 class="donation-item__title">Direcione um valor para a plataforma</h5>
+                                        </div>
+
+                                        <!-- VALOR A DOAR -->
+                                        <div class="col-lg-5 col-xl-6">
+                                            <label class="form__label"><span class="form__icon">R$</span>
+                          <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="valorPlataforma"/>
+                        </label>
+                                        </div>
+
+                                        <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                        <div class="col-lg-7 col-xl-6 text-lg-right">
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'boletoPlataformaLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'boletoPlataformaLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'boletoPlataformaLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'boletoPlataformaLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'boletoPlataformaLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                        </div>
+                                    </div>
+
+                                    <div #divRecaptcha id="recaptcha"></div>
+
+                                    <!-- BOTOES -->
+                                    <div style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit__success" style="margin-top: 10px;" type="submit" (click)="realizarDoacaoBoletoUserLogado()" [disabled]="!boletoUserLogadoForm.valid" [ngStyle]="{'background-color': !boletoUserLogadoForm.valid ? '#D3D3D3' : ''}">+ Confirmar Doação</button>
+                                        <button class="form__submit__danger inlineBtns" type="submit" style="margin-top: 10px;" (click)="naoQueroDoarBoleto()">- Cancelar</button>
+                                    </div>
+
+                                    <!-- <div>
+                      {{this.boletoUserLogadoForm.value|json}}
+                    </div> -->
+                                </form>
+
+                                <!-- FORMULÁRIO PIX NÃO LOGADO (pronto) -->
+                                <form *ngIf="payment_method_toggle == 'pix' && !userLogado" class="form donation-form" [formGroup]="pixForm" autocomplete="on">
+
+                                    <div formArrayName="items" *ngFor="let item of itemsPixArray.controls; let i = index">
+
+                                        <div class="row align-items-baseline margin-bottom" [formGroupName]="i">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Faça sua doação em PIX</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="amount"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'pix')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'pix')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'pix')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'pix')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'pix')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- DOACAO PRA PLATAFORMA -->
+                                        <div class="row align-items-baseline margin-bottom" [formGroup]="pixForm">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Direcione um valor para a plataforma</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="valorPlataforma"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'pixPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'pixPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'pixPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'pixPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'pixPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div>
+                        {{this.pixForm.value|json}}
+                      </div> -->
+                                    </div>
+
+                                    <!-- DADOS PARA PAGAMENTO -->
+                                    <div class="row" [formGroup]="customerForm" autocomplete="on">
+                                        <div class="col-12">
+                                            <h6 class="form__title">Dados de Pagamento</h6>
+                                        </div>
+
+                                        <div class="col-lg-3 margin-30">
+                                            <input class="form__field" type="text" formControlName="name" placeholder="Nome Completo *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('name')?.hasError('required') && this.customerForm.get('name')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('name')?.hasError('maxlength') && this.customerForm.get('name')?.touched">
+                                                Máximo 64 caracteres
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 margin-30">
+                                            <input class="form__field" type="email" formControlName="email" placeholder="E-mail *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('required') && this.customerForm.get('email')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('maxlength') && this.customerForm.get('email')?.touched">
+                                                Máximo 64 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('email') && this.customerForm.get('email')?.touched">
+                                                Formato inválido
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 margin-30">
+                                            <select class="form__field" formControlName="type" style="color: #6e6e6e; margin-bottom: 0;" required="required" (change)="documentSelected($event)">
+                          <option value="" disabled selected hidden>Tipo de Documento *</option>
+                          <option value="individual">CPF</option>
+                          <option value="company">CNPJ</option>
+                        </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('type')?.hasError('required') && this.customerForm.get('type')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 margin-30">
+                                            <input class="form__field" style="margin-bottom: 0;" mask={{document_mask}} formControlName="document" placeholder="Documento *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('required') && this.customerForm.get('document')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('minlength') && this.customerForm.get('document')?.touched">
+                                                Mínimo 11 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('maxlength') && this.customerForm.get('document')?.touched">
+                                                Máximo 14 caracteres
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div #divRecaptcha id="recaptcha"></div>
+
+                                    <!-- BOTOES -->
+                                    <div style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit__success" style="margin-top: 10px;" type="submit" (click)="realizarDoacaoPix(qrCodePixInterno)" [disabled]="!pixForm.valid" [ngStyle]="{'background-color': !pixForm.valid ? '#D3D3D3' : ''}">+ Confirmar Doação</button>
+                                        <button class="form__submit__danger inlineBtns" type="submit" style="margin-top: 10px;" (click)="naoQueroDoarPix()">- Cancelar</button>
+                                    </div>
+                                </form>
+
+                                <!-- FORMULÁRIO PIX LOGADO (pronto) -->
+                                <form *ngIf="payment_method_toggle == 'pix' && userLogado" class="form donation-form" [formGroup]="pixUserLogadoForm" autocomplete="on">
+
+                                    <div formArrayName="items" *ngFor="let item of itemsPixUserLogadoArray.controls; let i = index">
+
+                                        <div class="row align-items-baseline margin-bottom" [formGroupName]="i">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Faça sua doação em PIX</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="amount"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'pixLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'pixLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'pixLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'pixLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'pixLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- DOACAO PRA PLATAFORMA -->
+                                    <div class="row align-items-baseline margin-bottom" [formGroup]="pixUserLogadoForm">
+                                        <div class="col-12" style="margin-bottom: 20px;">
+                                            <h5 class="donation-item__title">Direcione um valor para a plataforma</h5>
+                                        </div>
+
+                                        <!-- VALOR A DOAR -->
+                                        <div class="col-lg-5 col-xl-6">
+                                            <label class="form__label"><span class="form__icon">R$</span>
+                          <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="valorPlataforma"/>
+                        </label>
+                                        </div>
+
+                                        <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                        <div class="col-lg-7 col-xl-6 text-lg-right">
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'pixLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'pixLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'pixLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'pixLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'pixLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                        </div>
+                                    </div>
+
+                                    <div #divRecaptcha id="recaptcha"></div>
+
+                                    <!-- BOTOES -->
+                                    <div style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit__success" style="margin-top: 10px;" type="submit" (click)="realizarDoacaoPixUserLogado(qrCodePixInterno)" [disabled]="!pixUserLogadoForm.valid" [ngStyle]="{'background-color': !pixUserLogadoForm.valid ? '#D3D3D3' : ''}">+ Confirmar Doação</button>
+                                        <button class="form__submit__danger inlineBtns" type="submit" style="margin-top: 10px;" (click)="naoQueroDoarPix()">- Cancelar</button>
+                                    </div>
+
+                                    <!-- <div>
+                      {{this.pixUserLogadoForm.value|json}}
+                    </div> -->
+                                </form>
+
+                                <!-- FORMULÁRIO CARTÃO NÃO LOGADO (pronto) -->
+                                <form *ngIf="payment_method_toggle == 'credit_card' && !userLogado" class="form donation-form" [formGroup]="cartaoForm" autocomplete="on">
+
+                                    <div formArrayName="items" *ngFor="let item of itemsCartaoArray.controls; let i = index">
+
+                                        <div class="row align-items-baseline margin-bottom" [formGroupName]="i">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Faça sua doação em Cartão de Crédito</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="amount"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'cartao')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'cartao')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'cartao')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'cartao')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'cartao')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- DOACAO PRA PLATAFORMA -->
+                                        <div class="row align-items-baseline margin-bottom" [formGroup]="cartaoForm">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Direcione um valor para a plataforma</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="valorPlataforma"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="10" (change)="valueBoxSelected($event, 'cartaoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="20" (change)="valueBoxSelected($event, 'cartaoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="50" (change)="valueBoxSelected($event, 'cartaoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="100" (change)="valueBoxSelected($event, 'cartaoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="500" (change)="valueBoxSelected($event, 'cartaoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div>
+                        {{this.cartaoForm.value|json}}
+                      </div> -->
+                                    </div>
+
+                                    <!-- DADOS PARA PAGAMENTO -->
+                                    <div class="row" [formGroup]="customerForm" autocomplete="on">
+                                        <div class="col-12">
+                                            <h6 class="form__title">Dados de Pagamento</h6>
+                                        </div>
+
+                                        <div class="col-lg-3 margin-30">
+                                            <input class="form__field" type="text" formControlName="name" placeholder="Nome Completo *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('name')?.hasError('required') && this.customerForm.get('name')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('name')?.hasError('maxlength') && this.customerForm.get('name')?.touched">
+                                                Máximo 64 caracteres
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 margin-30">
+                                            <input class="form__field" type="email" formControlName="email" placeholder="E-mail *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('required') && this.customerForm.get('email')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('maxlength') && this.customerForm.get('email')?.touched">
+                                                Máximo 64 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('email') && this.customerForm.get('email')?.touched">
+                                                Formato inválido
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 margin-30">
+                                            <select class="form__field" formControlName="type" style="color: #6e6e6e; margin-bottom: 0;" required="required" (change)="documentSelected($event)">
+                          <option value="" disabled selected hidden>Tipo de Documento *</option>
+                          <option value="individual">CPF</option>
+                          <option value="company">CNPJ</option>
+                        </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('type')?.hasError('required') && this.customerForm.get('type')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 margin-30">
+                                            <input class="form__field" style="margin-bottom: 0;" mask={{document_mask}} formControlName="document" placeholder="Documento *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('required') && this.customerForm.get('document')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('minlength') && this.customerForm.get('document')?.touched">
+                                                Mínimo 11 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('maxlength') && this.customerForm.get('document')?.touched">
+                                                Máximo 14 caracteres
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-12">
+                                            <h6 class="form__title">Dados de Cobrança</h6>
+                                        </div>
+                                    </div>
+
+                                    <!-- ENDEREÇO DE COBRANÇA -->
+                                    <div formArrayName="payments" *ngFor="let payment of paymentsCartaoArray.controls; let i = index">
+                                        <div [formGroupName]="i">
+                                            <div formGroupName="credit_card">
+                                                <div formGroupName="card">
+
+                                                    <!-- LINHA 1 -->
+                                                    <div class="row">
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" formControlName="number" mask="0000 0000 0000 0000" placeholder="Número do Cartão *" required="required" />
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" formControlName="holder_name" placeholder="Nome no cartão *" required="required" />
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" formControlName="holder_document" mask="000.000.000-00" placeholder="CPF *" required="required" />
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- LINHA 2 -->
+                                                    <div class="row">
+                                                        <div class="col-lg-4 margin-30">
+                                                            <div>
+                                                                <select class="form__field" formControlName="exp_month" style="color: #6e6e6e;" required="required">
+                                    <option value="" disabled selected hidden>Mês de expiração *</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                  </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" mask="0000" placeholder="Ano de expiração (4 dígitos) *" formControlName="exp_year" required="required" />
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" mask="9999" formControlName="cvv" placeholder="CVV *" required="required" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div formGroupName="billing_address">
+                                                        <div class="row">
+                                                            <div class="col-lg-8 margin-30">
+                                                                <input class="form__field" formControlName="line_1" placeholder="Endereço *" required="required" />
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <input class="form__field" mask="00000-000" formControlName="zip_code" placeholder="CEP *" required="required" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 margin-30">
+                                                                <div>
+                                                                    <select class="form__field" formControlName="state" style="color: #6e6e6e;" required="required">
+                                      <option value="" disabled selected hidden>Estado *</option>
+                                      <option value="AC">Acre</option>
+                                      <option value="AL">Alagoas</option>
+                                      <option value="AP">Amapá</option>
+                                      <option value="AM">Amazonas</option>
+                                      <option value="BA">Bahia</option>
+                                      <option value="CE">Ceará</option>
+                                      <option value="DF">Distrito Federal</option>
+                                      <option value="ES">Espírito Santo</option>
+                                      <option value="GO">Goiás</option>
+                                      <option value="MA">Maranhão</option>
+                                      <option value="MT">Mato Grosso</option>
+                                      <option value="MS">Mato Grosso do Sul</option>
+                                      <option value="MG">Minas Gerais</option>
+                                      <option value="PA">Pará</option>
+                                      <option value="PB">Paraíba</option>
+                                      <option value="PR">Paraná</option>
+                                      <option value="PE">Pernambuco</option>
+                                      <option value="PI">Piauí</option>
+                                      <option value="RJ">Rio de Janeiro</option>
+                                      <option value="RN">Rio Grande do Norte</option>
+                                      <option value="RS">Rio Grande do Sul</option>
+                                      <option value="RO">Rondônia</option>
+                                      <option value="RR">Roraima</option>
+                                      <option value="SC">Santa Catarina</option>
+                                      <option value="SP">São Paulo</option>
+                                      <option value="SE">Sergipe</option>
+                                      <option value="TO">Tocantins</option>
+                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <input class="form__field" formControlName="city" placeholder="Cidade *" required="required" />
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <div>
+                                                                    <select class="form__field" formControlName="country" style="color: #6e6e6e;" required="required">
+                                      <option value="" disabled selected hidden>País *</option>
+                                      <option value="BR">Brasil</option>
+                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div #divRecaptcha id="recaptcha"></div>
+
+                                    <!-- BOTOES -->
+                                    <div style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit__success" style="margin-top: 10px;" type="submit" (click)="realizarDoacaoCartao()" [disabled]="!cartaoForm.valid" [ngStyle]="{'background-color': !cartaoForm.valid ? '#D3D3D3' : ''}">+ Confirmar Doação</button>
+                                        <button class="form__submit__danger inlineBtns" type="submit" style="margin-top: 10px;" (click)="naoQueroDoarCartao()">- Cancelar</button>
+                                    </div>
+                                </form>
+
+                                <!-- FORMULÁRIO CARTÃO USER LOGADO - CARTAO NOVO (pronto) -->
+                                <form *ngIf="payment_method_toggle == 'credit_card' && userLogado && queroDoarCartaoNovoToggle" class="form donation-form" [formGroup]="cartaoUserLogadoForm" autocomplete="on">
+
+                                    <div formArrayName="items" *ngFor="let item of itemsCartaoUserLogadoArray.controls; let i = index">
+
+                                        <div class="row align-items-baseline margin-bottom" [formGroupName]="i">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Faça sua doação em Cartão de Crédito</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="amount"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'cartaoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'cartaoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'cartaoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'cartaoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'cartaoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- DOACAO PRA PLATAFORMA -->
+                                        <div class="row align-items-baseline margin-bottom" [formGroup]="cartaoUserLogadoForm">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Direcione um valor para a plataforma</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="valorPlataforma"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="10" (change)="valueBoxSelected($event, 'cartaoNovoUserLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="20" (change)="valueBoxSelected($event, 'cartaoNovoUserLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="50" (change)="valueBoxSelected($event, 'cartaoNovoUserLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="100" (change)="valueBoxSelected($event, 'cartaoNovoUserLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="500" (change)="valueBoxSelected($event, 'cartaoNovoUserLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div>
+                        {{this.cartaoUserLogadoForm.value|json}}
+                      </div> -->
+                                    </div>
+
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-12">
+                                            <h6 class="form__title">Dados de Cobrança - Novo Cartão</h6>
+                                        </div>
+                                    </div>
+
+                                    <!-- ENDEREÇO DE COBRANÇA -->
+                                    <div formArrayName="payments" *ngFor="let payment of paymentsCartaoUserLogadoArray.controls; let i = index">
+                                        <div [formGroupName]="i">
+                                            <div formGroupName="credit_card">
+                                                <div formGroupName="card">
+
+                                                    <!-- LINHA 1 -->
+                                                    <div class="row">
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" formControlName="number" mask="0000 0000 0000 0000" placeholder="Número do Cartão *" required="required" />
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" formControlName="holder_name" placeholder="Nome no cartão *" required="required" />
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" formControlName="holder_document" mask="000.000.000-00" placeholder="CPF *" required="required" />
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- LINHA 2 -->
+                                                    <div class="row">
+                                                        <div class="col-lg-4 margin-30">
+                                                            <div>
+                                                                <select class="form__field" formControlName="exp_month" style="color: #6e6e6e;" required="required">
+                                    <option value="" disabled selected hidden>Mês de expiração *</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                  </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" mask="0000" placeholder="Ano de expiração (4 dígitos) *" formControlName="exp_year" required="required" />
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" mask="9999" formControlName="cvv" placeholder="CVV *" required="required" />
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- ENDERECO DE COBRANCA -->
+                                                    <div formGroupName="billing_address">
+                                                        <div class="row">
+                                                            <div class="col-lg-8 margin-30">
+                                                                <input class="form__field" formControlName="line_1" placeholder="Endereço *" required="required" />
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <input class="form__field" mask="00000-000" formControlName="zip_code" placeholder="CEP *" required="required" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 margin-30">
+                                                                <div>
+                                                                    <select class="form__field" formControlName="state" style="color: #6e6e6e;" required="required">
+                                      <option value="" disabled selected hidden>Estado *</option>
+                                      <option value="AC">Acre</option>
+                                      <option value="AL">Alagoas</option>
+                                      <option value="AP">Amapá</option>
+                                      <option value="AM">Amazonas</option>
+                                      <option value="BA">Bahia</option>
+                                      <option value="CE">Ceará</option>
+                                      <option value="DF">Distrito Federal</option>
+                                      <option value="ES">Espírito Santo</option>
+                                      <option value="GO">Goiás</option>
+                                      <option value="MA">Maranhão</option>
+                                      <option value="MT">Mato Grosso</option>
+                                      <option value="MS">Mato Grosso do Sul</option>
+                                      <option value="MG">Minas Gerais</option>
+                                      <option value="PA">Pará</option>
+                                      <option value="PB">Paraíba</option>
+                                      <option value="PR">Paraná</option>
+                                      <option value="PE">Pernambuco</option>
+                                      <option value="PI">Piauí</option>
+                                      <option value="RJ">Rio de Janeiro</option>
+                                      <option value="RN">Rio Grande do Norte</option>
+                                      <option value="RS">Rio Grande do Sul</option>
+                                      <option value="RO">Rondônia</option>
+                                      <option value="RR">Roraima</option>
+                                      <option value="SC">Santa Catarina</option>
+                                      <option value="SP">São Paulo</option>
+                                      <option value="SE">Sergipe</option>
+                                      <option value="TO">Tocantins</option>
+                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <input class="form__field" formControlName="city" placeholder="Cidade *" required="required" />
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <div>
+                                                                    <select class="form__field" formControlName="country" style="color: #6e6e6e;" required="required">
+                                      <option value="" disabled selected hidden>País *</option>
+                                      <option value="BR">Brasil</option>
+                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div #divRecaptcha id="recaptcha"></div>
+
+                                    <!-- BOTOES -->
+                                    <div style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit__success" style="margin-top: 10px;" type="submit" (click)="realizarDoacaoCartaoUserLogado()" [disabled]="!cartaoUserLogadoForm.valid" [ngStyle]="{'background-color': !cartaoUserLogadoForm.valid ? '#D3D3D3' : ''}">+ Confirmar Doação</button>
+                                        <button class="form__submit__danger inlineBtns" type="submit" style="margin-top: 10px;" (click)="naoQueroDoarCartaoUserLogado()">- Cancelar</button>
+                                    </div>
+                                </form>
+
+                                <!-- FORMULÁRIO CARTÃO USER LOGADO - CARTAO CADASTRADO (pronto) -->
+                                <form *ngIf="payment_method_toggle == 'credit_card' && userLogado && queroDoarCartaoCadastradoToggle" class="form donation-form" [formGroup]="cartaoCadastradoUserLogadoForm" autocomplete="on">
+
+                                    <div formArrayName="items" *ngFor="let item of itemsCartaoCadastradoUserLogadoArray.controls; let i = index">
+
+                                        <div class="row align-items-baseline margin-bottom" [formGroupName]="i">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Faça sua doação em Cartão de Crédito</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="amount"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'cartaoLogadoCadastrado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'cartaoLogadoCadastrado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'cartaoLogadoCadastrado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'cartaoLogadoCadastrado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'cartaoLogadoCadastrado')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- DOACAO PRA PLATAFORMA -->
+                                        <div class="row align-items-baseline margin-bottom" [formGroup]="cartaoCadastradoUserLogadoForm">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Direcione um valor para a plataforma</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="valorPlataforma"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="10" (change)="valueBoxSelected($event, 'cartaoCadastradoUserLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="20" (change)="valueBoxSelected($event, 'cartaoCadastradoUserLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="50" (change)="valueBoxSelected($event, 'cartaoCadastradoUserLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="100" (change)="valueBoxSelected($event, 'cartaoCadastradoUserLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select-plataforma" value="500" (change)="valueBoxSelected($event, 'cartaoCadastradoUserLogadoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div>
+                        {{this.cartaoCadastradoUserLogadoForm.value|json}}
+                      </div> -->
+                                    </div>
+
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-12">
+                                            <h6 class="form__title">Dados de Cobrança - Cartão Cadastrado</h6>
+                                        </div>
+                                    </div>
+
+                                    <!-- ENDEREÇO DE COBRANÇA -->
+                                    <div formArrayName="payments" *ngFor="let payment of paymentsCartaoCadastradoUserLogadoArray.controls; let i = index">
+                                        <div [formGroupName]="i">
+                                            <div formGroupName="credit_card">
+
+                                                <!-- CARTÃO -->
+                                                <div class="row">
+                                                    <div class="col-lg-8 margin-30">
+                                                        <select class="form__field" required="required" formControlName="card_id">
+                                <option value="" disabled selected hidden>Cartão a ser utilizado *</option>
+                                <option *ngFor="let cartao of cartoes.data" value="{{cartao.id}}">{{ cartao.first_six_digits }}********{{ cartao.last_four_digits }}</option>
+                              </select>
+                                                    </div>
+
+                                                    <div class="col-lg-4 margin-30" formGroupName="card">
+                                                        <input class="form__field" mask="9999" formControlName="cvv" placeholder="CVV *" required="required" />
+                                                    </div>
+                                                </div>
+
+                                                <div formGroupName="card">
+                                                    <!-- ENDERECO DE COBRANCA -->
+                                                    <div formGroupName="billing_address">
+                                                        <div class="row">
+                                                            <div class="col-lg-8 margin-30">
+                                                                <input class="form__field" formControlName="line_1" placeholder="Endereço *" required="required" />
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <input class="form__field" mask="00000-000" formControlName="zip_code" placeholder="CEP *" required="required" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 margin-30">
+                                                                <div>
+                                                                    <select class="form__field" formControlName="state" style="color: #6e6e6e;" required="required">
+                                      <option value="" disabled selected hidden>Estado *</option>
+                                      <option value="AC">Acre</option>
+                                      <option value="AL">Alagoas</option>
+                                      <option value="AP">Amapá</option>
+                                      <option value="AM">Amazonas</option>
+                                      <option value="BA">Bahia</option>
+                                      <option value="CE">Ceará</option>
+                                      <option value="DF">Distrito Federal</option>
+                                      <option value="ES">Espírito Santo</option>
+                                      <option value="GO">Goiás</option>
+                                      <option value="MA">Maranhão</option>
+                                      <option value="MT">Mato Grosso</option>
+                                      <option value="MS">Mato Grosso do Sul</option>
+                                      <option value="MG">Minas Gerais</option>
+                                      <option value="PA">Pará</option>
+                                      <option value="PB">Paraíba</option>
+                                      <option value="PR">Paraná</option>
+                                      <option value="PE">Pernambuco</option>
+                                      <option value="PI">Piauí</option>
+                                      <option value="RJ">Rio de Janeiro</option>
+                                      <option value="RN">Rio Grande do Norte</option>
+                                      <option value="RS">Rio Grande do Sul</option>
+                                      <option value="RO">Rondônia</option>
+                                      <option value="RR">Roraima</option>
+                                      <option value="SC">Santa Catarina</option>
+                                      <option value="SP">São Paulo</option>
+                                      <option value="SE">Sergipe</option>
+                                      <option value="TO">Tocantins</option>
+                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <input class="form__field" formControlName="city" placeholder="Cidade *" required="required" />
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <div>
+                                                                    <select class="form__field" formControlName="country" style="color: #6e6e6e;" required="required">
+                                      <option value="" disabled selected hidden>País *</option>
+                                      <option value="BR">Brasil</option>
+                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div #divRecaptcha id="recaptcha"></div>
+
+                                    <!-- BOTOES -->
+                                    <div style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit__success" style="margin-top: 10px;" type="submit" (click)="realizarDoacaoCartaoCadastradoUserLogado()" [disabled]="!cartaoCadastradoUserLogadoForm.valid" [ngStyle]="{'background-color': !cartaoCadastradoUserLogadoForm.valid ? '#D3D3D3' : ''}">+ Confirmar Doação</button>
+                                        <button class="form__submit__danger inlineBtns" type="submit" style="margin-top: 10px;" (click)="naoQueroDoarCartaoCadastradoUserLogado()">- Cancelar</button>
+                                    </div>
+                                </form>
+
+                                <!-- FORMULÁRIO CARTÃO ASSINATURA - USER LOGADO -->
+                                <form *ngIf="payment_method_toggle == 'credit_card' && userLogado && queroAssinarToggle" class="form donation-form" [formGroup]="assinaturaUserLogadoForm" autocomplete="on">
+
+                                    <div formArrayName="items" *ngFor="let item of itemsArrayAssinatura.controls; let i = index">
+
+                                        <div class="row align-items-baseline margin-bottom" [formGroupName]="i">
+                                            <div class="col-12" style="margin-bottom: 20px;">
+                                                <h5 class="donation-item__title">Torne-se assinante e ajude mensalmente um PET</h5>
+                                            </div>
+
+                                            <!-- VALOR A DOAR -->
+                                            <div class="col-lg-5 col-xl-6" formGroupName="pricing_scheme">
+                                                <label class="form__label"><span class="form__icon">R$</span>
+                            <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="price"/>
+                          </label>
+                                            </div>
+
+                                            <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                            <div class="col-lg-7 col-xl-6 text-lg-right">
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'assinatura')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'assinatura')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'assinatura')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'assinatura')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                                <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                            <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'assinatura')" /><span class="form__radio-mask form__radio-mask"></span>
+                          </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-12">
+                                            <h6 class="form__title">Dados de Cobrança - Assinatura</h6>
+                                        </div>
+                                    </div>
+
+                                    <!-- ENDEREÇO DE COBRANÇA -->
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <div formGroupName="card">
+
+                                                    <!-- LINHA 1 -->
+                                                    <div class="row">
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" formControlName="number" mask="0000 0000 0000 0000" placeholder="Número do Cartão *" required="required" />
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" formControlName="holder_name" placeholder="Nome no cartão *" required="required" />
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" formControlName="holder_document" mask="000.000.000-00" placeholder="CPF *" required="required" />
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- LINHA 2 -->
+                                                    <div class="row">
+                                                        <div class="col-lg-4 margin-30">
+                                                            <div>
+                                                                <select class="form__field" formControlName="exp_month" style="color: #6e6e6e;" required="required">
+                                    <option value="" disabled selected hidden>Mês de expiração *</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                  </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" mask="0000" placeholder="Ano de expiração (4 dígitos) *" formControlName="exp_year" required="required" />
+                                                        </div>
+                                                        <div class="col-lg-4 margin-30">
+                                                            <input class="form__field" mask="9999" formControlName="cvv" placeholder="CVV *" required="required" />
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- ENDERECO DE COBRANCA -->
+                                                    <div formGroupName="billing_address">
+                                                        <div class="row">
+                                                            <div class="col-lg-8 margin-30">
+                                                                <input class="form__field" formControlName="line_1" placeholder="Endereço *" required="required" />
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <input class="form__field" mask="00000-000" formControlName="zip_code" placeholder="CEP *" required="required" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 margin-30">
+                                                                <div>
+                                                                    <select class="form__field" formControlName="state" style="color: #6e6e6e;" required="required">
+                                      <option value="" disabled selected hidden>Estado *</option>
+                                      <option value="AC">Acre</option>
+                                      <option value="AL">Alagoas</option>
+                                      <option value="AP">Amapá</option>
+                                      <option value="AM">Amazonas</option>
+                                      <option value="BA">Bahia</option>
+                                      <option value="CE">Ceará</option>
+                                      <option value="DF">Distrito Federal</option>
+                                      <option value="ES">Espírito Santo</option>
+                                      <option value="GO">Goiás</option>
+                                      <option value="MA">Maranhão</option>
+                                      <option value="MT">Mato Grosso</option>
+                                      <option value="MS">Mato Grosso do Sul</option>
+                                      <option value="MG">Minas Gerais</option>
+                                      <option value="PA">Pará</option>
+                                      <option value="PB">Paraíba</option>
+                                      <option value="PR">Paraná</option>
+                                      <option value="PE">Pernambuco</option>
+                                      <option value="PI">Piauí</option>
+                                      <option value="RJ">Rio de Janeiro</option>
+                                      <option value="RN">Rio Grande do Norte</option>
+                                      <option value="RS">Rio Grande do Sul</option>
+                                      <option value="RO">Rondônia</option>
+                                      <option value="RR">Roraima</option>
+                                      <option value="SC">Santa Catarina</option>
+                                      <option value="SP">São Paulo</option>
+                                      <option value="SE">Sergipe</option>
+                                      <option value="TO">Tocantins</option>
+                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <input class="form__field" formControlName="city" placeholder="Cidade *" required="required" />
+                                                            </div>
+                                                            <div class="col-lg-4 margin-30">
+                                                                <div>
+                                                                    <select class="form__field" formControlName="country" style="color: #6e6e6e;" required="required">
+                                      <option value="" disabled selected hidden>País *</option>
+                                      <option value="BR">Brasil</option>
+                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div #divRecaptcha id="recaptcha"></div>
+
+                                    <!-- BOTOES -->
+                                    <div style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit__success" style="margin-top: 10px;" type="submit" (click)="realizarAssinaturaUserLogado()" [disabled]="!assinaturaUserLogadoForm.valid" [ngStyle]="{'background-color': !assinaturaUserLogadoForm.valid ? '#D3D3D3' : ''}">+ Confirmar Doação</button>
+                                        <button class="form__submit__danger inlineBtns" type="submit" style="margin-top: 10px;" (click)="naoQueroAssinarUserLogado()">- Cancelar</button>
+                                    </div>
+                                </form>
+
+                                <!-- BOTOES -->
+                                <div style="text-align: center;" *ngIf="payment_method_toggle == ''">
+                                    <!-- <button class="form__submit" type="submit">+ Realizar Doação</button> -->
+                                    <button class="form__submit" type="submit" style="margin-left: 20px;" (click)="naoQueroDoar()">x Fechar</button>
+                                </div>
+
+                                <!-- BOTOES PARA SELECIONAR O CARTÃO -->
+                                <div style="text-align: center;" *ngIf="payment_method_toggle == 'credit_card' && userLogado && !queroDoarCartaoNovoToggle && !queroDoarCartaoCadastradoToggle && !queroAssinarToggle">
+                                    <button class="form__submit" type="submit" value="cartaoCadastrado" (click)="cardToBeUsedSelected($event)">Cartão Cadastrado</button>
+                                    <button class="form__submit inlineBtns" type="submit" value="cartaoNovo" (click)="cardToBeUsedSelected($event)">Cartão Novo</button>
+                                    <button class="form__submit inlineBtns" type="submit" value="assinatura" (click)="cardToBeUsedSelected($event)">Doação Mensal</button>
+                                </div>
+
+                            </div>
+
+                            <!-- FORMULÁRIO EXTERNO DE PIX RAPIDO USER NÃO LOGADO (pronto) -->
+                            <form *ngIf="queroDoarPixRapidoToggle" class="form donation-form" [formGroup]="pixRapidoForm" autocomplete="on">
+
+                                <div formArrayName="items" *ngFor="let item of itemsPixRapidoArray.controls; let i = index">
+
+                                    <div class="row align-items-baseline margin-bottom" [formGroupName]="i">
+                                        <div class="col-12" style="margin-bottom: 20px;">
+                                            <h5 class="donation-item__title">Faça sua doação em PIX Rápido</h5>
+                                        </div>
+
+                                        <!-- VALOR A DOAR -->
+                                        <div class="col-lg-5 col-xl-6">
+                                            <label class="form__label"><span class="form__icon">R$</span>
+                          <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="amount"/>
+                        </label>
+                                        </div>
+
+                                        <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                        <div class="col-lg-7 col-xl-6 text-lg-right">
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'pixRapido')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'pixRapido')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'pixRapido')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'pixRapido')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'pixRapido')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- DOACAO PRA PLATAFORMA -->
+                                    <div class="row align-items-baseline margin-bottom" [formGroup]="pixRapidoForm">
+                                        <div class="col-12" style="margin-bottom: 20px;">
+                                            <h5 class="donation-item__title">Direcione um valor para a plataforma</h5>
+                                        </div>
+
+                                        <!-- VALOR A DOAR -->
+                                        <div class="col-lg-5 col-xl-6">
+                                            <label class="form__label"><span class="form__icon">R$</span>
+                          <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="valorPlataforma"/>
+                        </label>
+                                        </div>
+
+                                        <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                        <div class="col-lg-7 col-xl-6 text-lg-right">
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'pixRapidoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'pixRapidoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'pixRapidoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'pixRapidoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'pixRapidoPlataforma')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div>
+                      {{this.pixRapidoForm.value|json}}
+                    </div> -->
+                                </div>
+
+                                <!-- DADOS PARA PAGAMENTO -->
+                                <div class="row" [formGroup]="customerForm" autocomplete="on">
+                                    <div class="col-12">
+                                        <h6 class="form__title">Dados de Pagamento</h6>
+                                    </div>
+
+                                    <div class="col-lg-3 margin-30">
+                                        <input class="form__field" type="text" formControlName="name" placeholder="Nome Completo *" required="required" />
+                                        <div class="text-danger alertFormError" *ngIf="this.customerForm.get('name')?.hasError('required') && this.customerForm.get('name')?.touched">
+                                            * Campo obrigatório
+                                        </div>
+                                        <div class="text-danger alertFormError" *ngIf="this.customerForm.get('name')?.hasError('maxlength') && this.customerForm.get('name')?.touched">
+                                            Máximo 64 caracteres
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 margin-30">
+                                        <input class="form__field" type="email" formControlName="email" placeholder="E-mail *" required="required" />
+                                        <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('required') && this.customerForm.get('email')?.touched">
+                                            * Campo obrigatório
+                                        </div>
+                                        <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('maxlength') && this.customerForm.get('email')?.touched">
+                                            Máximo 64 caracteres
+                                        </div>
+                                        <div class="text-danger alertFormError" *ngIf="this.customerForm.get('email')?.hasError('email') && this.customerForm.get('email')?.touched">
+                                            Formato inválido
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 margin-30">
+                                        <select class="form__field" formControlName="type" style="color: #6e6e6e; margin-bottom: 0;" required="required" (change)="documentSelected($event)">
+                        <option value="" disabled selected hidden>Tipo de Documento *</option>
+                        <option value="individual">CPF</option>
+                        <option value="company">CNPJ</option>
+                      </select>
+                                        <div class="text-danger alertFormError" *ngIf="this.customerForm.get('type')?.hasError('required') && this.customerForm.get('type')?.touched">
+                                            * Campo obrigatório
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 margin-30">
+                                        <input class="form__field" style="margin-bottom: 0;" mask={{document_mask}} formControlName="document" placeholder="Documento *" required="required" />
+                                        <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('required') && this.customerForm.get('document')?.touched">
+                                            * Campo obrigatório
+                                        </div>
+                                        <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('minlength') && this.customerForm.get('document')?.touched">
+                                            Mínimo 11 caracteres
+                                        </div>
+                                        <div class="text-danger alertFormError" *ngIf="this.customerForm.get('document')?.hasError('maxlength') && this.customerForm.get('document')?.touched">
+                                            Máximo 14 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div #divRecaptcha id="recaptcha"></div>
+
+                                <!-- BOTOES -->
+                                <div style="text-align: center; margin-top: 30px;">
+                                    <button class="form__submit__success" style="margin-top: 10px;" type="submit" (click)="realizarDoacaoPixRapido(qrCode)" [disabled]="!pixRapidoForm.valid" [ngStyle]="{'background-color': !pixRapidoForm.valid ? '#D3D3D3' : ''}">+ Confirmar Doação</button>
+                                    <button class="form__submit__danger inlineBtns" type="submit" style="margin-top: 10px;" (click)="naoQueroDoarPixRapido()">- Cancelar</button>
+                                </div>
+                            </form>
+
+                            <!-- FORMULÁRIO EXTERNO DE PIX RAPIDO USER LOGADO (pronto) -->
+                            <form *ngIf="queroDoarPixRapidoUserLogadoToggle" class="form donation-form" [formGroup]="pixRapidoUserLogadoForm" autocomplete="on">
+
+                                <div formArrayName="items" *ngFor="let item of itemsPixRapidoUserLogadoArray.controls; let i = index">
+
+                                    <div class="row align-items-baseline margin-bottom" [formGroupName]="i">
+                                        <div class="col-12" style="margin-bottom: 20px;">
+                                            <h5 class="donation-item__title">Faça sua doação em PIX Rápido</h5>
+                                        </div>
+
+                                        <!-- VALOR A DOAR -->
+                                        <div class="col-lg-5 col-xl-6">
+                                            <label class="form__label"><span class="form__icon">R$</span>
+                          <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="amount"/>
+                        </label>
+                                        </div>
+
+                                        <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                        <div class="col-lg-7 col-xl-6 text-lg-right">
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'pixRapidoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'pixRapidoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'pixRapidoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'pixRapidoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'pixRapidoLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- DOACAO PRA PLATAFORMA -->
+                                    <div class="row align-items-baseline margin-bottom" [formGroup]="pixRapidoUserLogadoForm">
+                                        <div class="col-12" style="margin-bottom: 20px;">
+                                            <h5 class="donation-item__title">Direcione um valor para a plataforma</h5>
+                                        </div>
+
+                                        <!-- VALOR A DOAR -->
+                                        <div class="col-lg-5 col-xl-6">
+                                            <label class="form__label"><span class="form__icon">R$</span>
+                          <input class="form__field form__input-number" placeholder="Valor" type="number" formControlName="valorPlataforma"/>
+                        </label>
+                                        </div>
+
+                                        <!-- VALORES PRE DEFINIDOS (CHECKBOX) -->
+                                        <div class="col-lg-7 col-xl-6 text-lg-right">
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 10</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="10" (change)="valueBoxSelected($event, 'pixRapidoPlataformaLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 20</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="20" (change)="valueBoxSelected($event, 'pixRapidoPlataformaLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 50</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="50" (change)="valueBoxSelected($event, 'pixRapidoPlataformaLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 100</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="100" (change)="valueBoxSelected($event, 'pixRapidoPlataformaLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                            <label class="form__radio-label"><span class="form__label-text">R$ 500</span>
+                          <input class="form__input-radio" type="radio" name="value-select" value="500" (change)="valueBoxSelected($event, 'pixRapidoPlataformaLogado')" /><span class="form__radio-mask form__radio-mask"></span>
+                        </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div>
+                      {{this.pixRapidoUserLogadoForm.value|json}}
+                    </div> -->
+                                </div>
+
+                                <div #divRecaptcha id="recaptcha"></div>
+
+                                <!-- BOTOES -->
+                                <div style="text-align: center; margin-top: 30px;">
+                                    <button class="form__submit__success" style="margin-top: 10px;" type="submit" (click)="realizarDoacaoPixRapidoUserLogado(qrCodeUserLogado)" [disabled]="!pixRapidoUserLogadoForm.valid" [ngStyle]="{'background-color': !pixRapidoUserLogadoForm.valid ? '#D3D3D3' : ''}">+ Confirmar Doação</button>
+                                    <button class="form__submit__danger inlineBtns" type="submit" style="margin-top: 10px;" (click)="naoQueroDoarPixRapido()">- Cancelar</button>
+                                </div>
+                            </form>
+
+                            <!-- BOTOES EXTERNOS -->
+                            <div *ngIf="!queroDoarToggle && !queroDoarPixRapidoToggle && !queroDoarPixRapidoUserLogadoToggle" style="text-align: center; margin-top: 30px;">
+                                <button class="form__submit__success" type="submit" (click)="queroDoarPixRapido()" style="margin-top: 10px;">+ PIX Rápido</button>
+                                <button class="form__submit__primary inlineBtns" style="margin-top: 10px;" type="submit" (click)="queroDoar()">+ Quero Doar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- donation end-->
+
+    <section class="section" style="padding-top: 60px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row" style="margin-bottom: 30px;">
+                        <div class="col-12">
+                            <h5 class="donation-item__title">Informações da campanha</h5>
+                        </div>
+                    </div>
+                    <!-- cause details tabs start-->
+                    <div class="tabs horizontal-tabs cause-details-tabs">
+                        <div class="horizontal-tabs__content">
+                            <div class="horizontal-tabs__item" id="horizontal-tabs__item-1">
+                                <p><strong>{{ campanha.descricao_curta }}</strong></p>
+                                <p style="text-align: justify; white-space: pre-wrap;">{{ campanha.descricao_longa }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- cause details tabs end-->
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 50px;">
+                <div class="col-12" style="display: inline-block; text-align: center;">
+                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.vaquinhaanimal.com.br%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
+                        <img src="assets/img/facebook_icon_200_200.png" width="50px" height="50px" alt="Share on Facebook">
+                    </a>
+                    <a target="_blank" href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Olá! Por favor, ajudem para que nossa campanha alcance a meta. Isso vai mudar a nossa vida." data-url="https://www.vaquinhaanimal.com.br" data-via="Plataforma_Vaquinha_Animal"
+                        data-lang="pt" data-show-count="false">
+                        <img style="margin-left: 10px;" width="50" height="50" src="assets/img/twitter_icon_200_200.png" alt="Share on Twitter">
+                    </a>
+                    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    <a target="_blank" href="https://api.whatsapp.com/send?text=Ajude%20para%20que%20nossa%20campanha%20atinja%20a%20meta%0a%0a$https://www.vaquinhaanimal.com.br">
+                        <img style="margin-left: 10px;" width="50" height="50" src="assets/img/whatsapp_icon_200_200.png" alt="Share on WhatsApp">
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="row" style="margin-bottom: 30px; margin-top: 50px;">
+                        <div class="col-12">
+                            <h5 class="donation-item__title" style="text-align: center;">Vídeo da campanha</h5>
+                        </div>
+                    </div>
+                    <!-- cause details tabs start-->
+                    <div class="tabs horizontal-tabs cause-details-tabs">
+                        <div class="horizontal-tabs__content">
+                            <div class="horizontal-tabs__item" id="horizontal-tabs__item-1" style="text-align: center;">
+                                <p *ngIf="campanha.video_url == '' || campanha.video_url == null" style="color: #777777; font-size: 15px;">Nenhum vídeo cadastrado</p>
+                                <p *ngIf="campanha.video_url != '' && campanha.video_url != null" style="color: #777777; font-size: 15px;">
+                                    <iframe width="560px" height="315px" [src]="campanha.video_url | safe" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- cause details tabs end-->
+                </div>
+
+            </div>
+            <div style="text-align: center; margin-top: 50px;">
+                <a class="form__submit" href="javascript:history.back()">Voltar</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- causes inner start-->
+    <section class="section causes causes--style-2" style="padding-top: 50px;"><img class="causes__bg" src="assets/img/causes_img-2.png" alt="img" />
+        <div class="container" *ngIf="outrasCampanhas">
+            <div class="row offset-margin">
+
+                <div class="col-md-12 col-xl-12" style="margin-bottom: 50px;">
+                    <div class="heading heading--primary no-margin-bottom"><span class="heading__pre-title"></span>
+                        <h2 class="heading__title no-margin-bottom"><span>Outras</span> <span> Campanhas</span></h2>
+                    </div>
+                </div>
+
+                <!-- CARD REPETIDOR -->
+                <div class="col-md-6 col-lg-4" *ngFor="let campanha of outrasCampanhas">
+                    <div class="causes-item causes-item--primary">
+                        <div class="causes-item__body">
+                            <div class="causes-item__top">
+                                <h6 class="causes-item__title"> <a href="cause-details.html">{{campanha.titulo}}</a></h6>
+                                <p>{{campanha.descricao_curta}}</p>
+                            </div>
+                            <div class="causes-item__img">
+                                <div class="causes-item__badge" style="background-color: #49C2DF">{{campanha.tag_campanha | tagCampanha}}</div>
+                                <img *ngIf="campanha.imagens.length != 0" class="img--bg" src="{{ imagens }}{{ campanha.imagens[0].arquivo }}">
+                                <img *ngIf="campanha.imagens.length == 0" class="img--bg" src="assets/img/noImage.png" alt="Card image cap">
+                            </div>
+                            <div class="causes-item__lower">
+                                <div class="progress-bar">
+                                    <div class="progress-bar__inner" [ngStyle]="{width: getWidth(campanha.percentual_arrecadado!)}">
+                                        <div class="progress-bar__value">{{campanha.percentual_arrecadado!}}%</div>
+                                    </div>
+                                </div>
+                                <div class="row causes-item__details-holder">
+                                    <div><span>Objetivo: </span><span style="font-weight: 700; color: black;">{{campanha.valor_desejado | currency}}</span></div>
+                                </div>
+                                <div class="row" style="font-size: 14px;">
+                                    <div><span>Arrecadado: </span><span style="font-weight: 700; color: black;">{{campanha.total_arrecadado | currency}}</span></div>
+                                </div>
+                            </div>
+                            <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0; cursor: pointer;" (click)="alterarCampanha(campanha.url_campanha)">+ Quero Ajudar</a></div>
+                            <!-- <divtyle="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" [routerLink]="['/campanhas/detalhes', campanha.id]">+ Quero Ajudar</a></div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- causes inner end-->
+
+</main>
+
+<!-- MODAL QR CODE PIX-->
+<ng-template #qrCode>
+    <div class="modal-header">
+        <h5 class="modal-title">Leia o QR CODE abaixo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" style="text-align: center;">
+        <div>
+            <img [src]="qrCodeLink" />
+        </div>
+        <div>
+            <p>O QR CODE expira em 5 minutos!</p>
+            <h6 style="margin-top: 20px;">Copia e cola</h6>
+            <div>
+                <p style="font-size: 12px;">{{qrCodeCopiaCola}}</p>
+            </div>
+            <p style="font-size: 14px; margin-top: 20px;">Só transfira se aparecer Doadores Especiais em seu aplicativo.</p>
+            <button class="btn btn-primary" (click)="copyText()" value="click to copy">Copiar Código</button>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Cancelar</button>
+    </div>
+</ng-template>
+
+<!-- MODAL QR CODE PIX USER LOGADO-->
+<ng-template #qrCodeUserLogado>
+    <div class="modal-header">
+        <h5 class="modal-title">Leia o QR CODE abaixo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" style="text-align: center;">
+        <div>
+            <img [src]="qrCodeLink" />
+        </div>
+        <div>
+            <p>O QR CODE expira em 5 minutos!</p>
+            <h6 style="margin-top: 20px;">Copia e cola</h6>
+            <div>
+                <p style="font-size: 12px;">{{qrCodeCopiaCola}}</p>
+            </div>
+            <p style="font-size: 14px; margin-top: 20px;">Só transfira se aparecer Doadores Especiais em seu aplicativo.</p>
+            <button class="btn btn-primary" (click)="copyText()" value="click to copy">Copiar Código</button>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closeModalUserLogado()">Cancelar</button>
+    </div>
+</ng-template>
+
+<!-- MODAL QR CODE PIX INTERNO-->
+<ng-template #qrCodePixInterno>
+    <div class="modal-header">
+        <h5 class="modal-title">Leia o QR CODE abaixo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" style="text-align: center;">
+        <div>
+            <img [src]="qrCodeLink" />
+        </div>
+        <div>
+            <p>O QR CODE expira em 5 minutos!</p>
+            <h6 style="margin-top: 20px;">Copia e cola</h6>
+            <div>
+                <p style="font-size: 12px;">{{qrCodeCopiaCola}}</p>
+            </div>
+            <p style="font-size: 14px; margin-top: 20px;">Só transfira se aparecer Doadores Especiais em seu aplicativo.</p>
+            <button class="btn btn-primary" (click)="copyText()" value="click to copy">Copiar Código</button>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closeModalPixInterno()">Cancelar</button>
+    </div>
+</ng-template>

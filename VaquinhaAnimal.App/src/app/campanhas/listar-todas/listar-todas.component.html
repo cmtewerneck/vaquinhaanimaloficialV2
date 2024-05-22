@@ -1,0 +1,99 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+  <section class="promo-primary">
+    <picture>
+      <source srcset="assets/img/causes.jpg" media="(min-width: 992px)"/><img class="img--bg" src="assets/img/causes.jpg" alt="img"/>
+    </picture>
+    <div class="promo-primary__description" style="bottom: 10px;"> <span>Salve um pet</span></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-auto">
+          <div class="align-container">
+            <div class="align-container__item"><span class="promo-primary__pre-title">Explore</span>
+              <h1 class="promo-primary__title"><span>Nossas</span> <span> Campanhas</span></h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- causes inner start-->
+  <section class="section causes-inner">
+    <div class="container" *ngIf="campanhasPaginado">
+      <div class="row offset-margin">
+        
+        <!-- CARD REPETIDOR -->
+        <div class="col-md-6 col-lg-4"  *ngFor="let campanha of campanhasPaginado.data">
+          <div class="causes-item causes-item--primary">
+            <div class="causes-item__body">
+              <div class="causes-item__top">
+                <h6 class="causes-item__title"> <a href="cause-details.html">{{campanha.titulo}}</a></h6>
+                <p>{{campanha.descricao_curta}}</p>
+              </div>
+              <div class="causes-item__img">
+                <div class="causes-item__badge" style="background-color: #49C2DF">{{campanha.tag_campanha | tagCampanha}}</div>
+                <img *ngIf="campanha.imagens.length != 0" class="img--bg" src="{{ imagens }}{{ campanha.imagens[0].arquivo }}">
+                <img *ngIf="campanha.imagens.length == 0" class="img--bg" src="assets/img/noImage.png" alt="Card image cap">
+              </div>
+              <div class="causes-item__lower">
+                <div class="progress-bar">
+                  <div class="progress-bar__inner" [ngStyle]="{width: getWidth(campanha.percentual_arrecadado!)}">
+                    <div class="progress-bar__value">{{campanha.percentual_arrecadado!}}%</div>
+                  </div>
+                </div>
+                <div class="row causes-item__details-holder">
+                  <div><span>Objetivo: </span><span style="font-weight: 700; color: black;">{{campanha.valor_desejado | currency}}</span></div>
+                </div>
+                <div class="row" style="font-size: 14px;">
+                  <div><span>Arrecadado: </span><span style="font-weight: 700; color: black;">{{campanha.total_arrecadado | currency}}</span></div>
+                </div>
+              </div>
+              <!-- <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" [routerLink]="['/campanhas/detalhes', campanha.id]">+ Quero Ajudar</a></div> -->
+              <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" [routerLink]="['/campanhas/detalhes', campanha.url_campanha]">+ Quero Ajudar</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="campanhasPaginado && (!campanhasPaginado.data || campanhasPaginado.data.length == 0)" style="text-align: center;">
+      <h5 style="text-align: center;">Não há campanhas até o momento!</h5>
+      <a [routerLink]="['/campanhas/criar']" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Criar campanha</a>
+    </div>
+    
+    <!-- PAGINADOR -->
+    <div class="container" *ngIf="campanhasPaginado && campanhasPaginado.data && campanhasPaginado.data.length != 0">
+      <div class="row">
+        <div class="col-12">
+          <!-- pagination start-->
+          <ul class="pagination">
+            <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--prev" (click)="previousOrNext('previous')"><i class="fa fa-angle-left" aria-hidden="true"></i><span>Página Anterior</span></li>
+            
+            <div *ngFor="let i of paginasPaginador">
+              <li class="pagination__item" [ngClass]="{ 'pagination__item--active': pageNumber == i}" (click)="pageChanged(i)"><span>{{i}}</span></li>
+            </div>
+            
+            <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--next" (click)="previousOrNext('next')"><span>Próxima Página</span><i class="fa fa-angle-right" aria-hidden="true"></i></li>
+          </ul>
+          <!-- pagination end-->
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- causes inner end-->
+  
+  <!-- bottom bg start-->
+  <section class="bottom-background background--brown">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="bottom-background__img"><img src="assets/img/bottom-bg.png" alt="img"/></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- bottom bg end-->
+</main>

@@ -1,0 +1,93 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+    <!-- MINHAS CAMPANHAS-->
+    <section class="section causes-inner" style="padding-top: 100px;">
+        <h2 class="heading__title" style="text-align: center; margin-bottom: 60px;"><span>Minha</span> <span> Carteira</span></h2>
+
+        <div class="container">
+
+            <!-- INÍCIO TABELA -->
+            <div class="table-responsive" *ngIf="cartoes && cartoes.data.length">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Numeração</th>
+                            <th scope="col">Bandeira</th>
+                            <th scope="col">Validade</th>
+                            <th scope="col">Status</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let cartao of cartoes.data">
+                            <td>{{ cartao.first_six_digits }}********{{ cartao.last_four_digits }}</td>
+                            <td>{{ cartao.brand }}</td>
+                            <td>{{ cartao.exp_month }}/{{ cartao.exp_year }}</td>
+                            <td *ngIf="cartao.status == 'active'">Ativo</td>
+                            <td *ngIf="cartao.status == 'inactive'">Inativo</td>
+                            <td>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Ações
+                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#" style="text-decoration: none;" data-toggle="modal" data-target="#removerCartao" (click)="salvarId(cartao.id)">Remover</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- FIM TABELA -->
+
+            <div *ngIf="!cartoes || cartoes.data.length == 0" style="text-align: center;">
+                <h5 style="text-align: center;">Você não possui cartões cadastrados!</h5>
+                <a [routerLink]="['/auth/add-card']" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Adicionar Cartão</a>
+                <!-- <a href="/auth/add-card" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Adicionar Cartão</a> -->
+            </div>
+
+            <div *ngIf="cartoes && cartoes.data.length != 0" style="text-align: center;">
+                <a [routerLink]="['/auth/add-card']" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Adicionar Cartão</a>
+                <!-- <a href="/auth/add-card" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Adicionar Cartão</a> -->
+            </div>
+
+        </div>
+    </section>
+    <!--MINHAS CAMPANHAS END-->
+
+    <!-- bottom bg start-->
+    <section class="bottom-background background--brown">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="bottom-background__img"><img src="assets/img/bottom-bg.png" alt="img" /></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- bottom bg end-->
+</main>
+
+
+<!-- Modal EXCLUIR -->
+<div class="modal fade" id="removerCartao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirma Exclusão?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <p>Seu cartão será excluído. Tem certeza disso?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="limparId()">Cancelar</button>
+                <button type="button" class="btn btn-success" (click)="deletarCartao()" data-dismiss="modal">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>

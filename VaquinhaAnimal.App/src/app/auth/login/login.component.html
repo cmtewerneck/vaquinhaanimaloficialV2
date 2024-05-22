@@ -1,0 +1,96 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+    <!-- section start-->
+    <section class="section" style="text-align: center; padding-top: 100px;">
+        <div class="container">
+            <div class="row margin-bottom">
+                <div class="col-12">
+                    <h2 class="heading__title"><span>Acesse</span> <span> sua conta</span></h2>
+                </div>
+            </div>
+            <!-- FORM START HERE-->
+            <section class="section contacts no-padding-top no-padding-bottom">
+                <div class="contacts-wrapper">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-xl-10">
+                                <form class="form message-form" [formGroup]="loginForm" autocomplete="on" >
+                                    <h6 class="form__title">Preencha com suas informações</h6><span class="form__text">* campos obrigatórios</span>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-8" style="margin: auto;">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <input class="form__field" style="margin-bottom: 0;" formControlName="email" placeholder="E-mail *" required="required"/>
+                                                    <div class="text-danger alertFormError" *ngIf="this.loginForm.get('email')?.hasError('required') && this.loginForm.get('email')?.touched">
+                                                        * Campo obrigatório
+                                                    </div>
+                                                    <div class="text-danger alertFormError" *ngIf="this.loginForm.get('email')?.hasError('minlength') && this.loginForm.get('email')?.touched">
+                                                        Mínimo 5 caracteres
+                                                    </div>
+                                                    <div class="text-danger alertFormError" *ngIf="this.loginForm.get('email')?.hasError('maxlength') && this.loginForm.get('email')?.touched">
+                                                        Máximo 64 caracteres
+                                                    </div>
+                                                    <div class="text-danger alertFormError" *ngIf="this.loginForm.get('email')?.hasError('email') && this.loginForm.get('email')?.touched">
+                                                        Formato Inválido
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 space-top-input">
+                                                    <input class="form__field" style="margin-bottom: 0;" formControlName="password" type={{passwordInputType}} placeholder="Senha *" required="required"/>
+                                                    <div class="text-danger alertFormError" *ngIf="this.loginForm.get('password')?.hasError('required') && this.loginForm.get('password')?.touched">
+                                                        * Campo obrigatório
+                                                    </div>
+                                                    <div class="text-danger alertFormError" *ngIf="this.loginForm.get('password')?.hasError('minlength') && this.loginForm.get('password')?.touched">
+                                                        Mínimo 6 caracteres
+                                                    </div>
+                                                    <div class="text-danger alertFormError" *ngIf="this.loginForm.get('password')?.hasError('maxlength') && this.loginForm.get('password')?.touched">
+                                                        Máximo 12 caracteres
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-lg-12"> 
+                                            <label class="form__checkbox-label"><span class="form__label-text">Mostrar Senha</span>
+                                                <input class="form__input-checkbox" type="checkbox" name="value-select" (change)="onCheckboxChange($event)"/><span class="form__checkbox-mask form__checkbox-mask"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- BOTÕES -->
+                                    <div class="col-12" style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit" (click)="login()">Entrar</button>
+                                        <button class="form__submit" (click)="resetForm()" style="margin-left: 10px;">Limpar</button>
+                                    </div>
+                                    
+                                    <div class="col-12" style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit" type="reset" style="margin-left: 10px;" [routerLink]="['/auth/reset-password']">Esqueci a senha</button>
+                                    </div>
+                                    
+                                    <!-- Divider Text -->
+                                    <div class="form-group col-lg-12 mx-auto d-flex align-items-center" style="margin-top: 60px;">
+                                        <div class="border-bottom w-100 ml-5"></div>
+                                        <span class="px-2 text-muted font-weight-bold text-muted">OU</span>
+                                        <div class="border-bottom w-100 mr-5"></div>
+                                    </div>
+                                    
+                                    <h6 class="form__title" style="margin: 30px 0 20px 0;">Ainda não possui conta?</h6>
+                                    <div class="col-12" style="text-align: center;">
+                                        <button class="form__submit" [routerLink]="['/auth/register']">Cadastrar-se agora</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- FORM END HERE-->
+        </div>
+    </section>
+    <!-- section end-->
+</main>

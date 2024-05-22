@@ -1,0 +1,230 @@
+<!-- aside dropdown start-->
+<div class="aside-dropdown">
+    <div class="aside-dropdown__inner">
+        <span class="aside-dropdown__close">
+      <svg class="icon">
+        <use xlink:href="#close"></use>
+      </svg></span>
+        <div class="aside-dropdown__item d-lg-none d-block">
+            <div style="margin-bottom: 40px; text-align: center;">
+                <img class="header-logo__img" src="assets/img/logo_fundo_claro.png" width="90%" alt="logo" />
+            </div>
+            <ul class="aside-menu">
+                <li class="aside-menu__item aside-menu__item--has-child">
+                    <a class="aside-menu__link" [routerLink]="['homepage']"><span>Início</span></a>
+                </li>
+                <li class="aside-menu__item aside-menu__item--has-child">
+                    <a class="aside-menu__link" [routerLink]="['campanhas/listar-todas']"><span>Campanhas</span></a>
+                </li>
+                <li class="aside-menu__item aside-menu__item--has-child">
+                    <a class="aside-menu__link" [routerLink]="['campanhas/criar']"><span>Crie a sua</span></a>
+                </li>
+                <li class="aside-menu__item aside-menu__item--has-child">
+                    <a class="aside-menu__link" [routerLink]="['artigos/listar-todos']"><span>Artigos</span></a>
+                </li>
+                <li class="aside-menu__item aside-menu__item--has-child">
+                    <a class="aside-menu__link" [routerLink]="['adocoes/listar-todas']"><span>Adote</span></a>
+                </li>
+                <li class="aside-menu__item aside-menu__item--has-child">
+                    <a class="aside-menu__link" [routerLink]="['contato']"><span>Contato</span></a>
+                </li>
+                <li class="aside-menu__item aside-menu__item--has-child" *ngIf="!userLogado">
+                    <a class="aside-menu__link" [routerLink]="['auth/login']"><span><strong>Entrar</strong></span></a>
+                </li>
+                <li class="aside-menu__item aside-menu__item--has-child" *ngIf="!userLogado">
+                    <a class="aside-menu__link" [routerLink]="['auth/register']"><span><strong>Cadastrar</strong></span></a>
+                </li>
+                <li class="aside-menu__item aside-menu__item--has-child" *ngIf="userLogado">
+                    <a class="aside-menu__link"><span><strong>{{nomeUsuario}}</strong></span></a>
+                    <!-- MENU USUÁRIO LOGADO -->
+                    <ul class="aside-menu__sub-list">
+                        <li>
+                            <a [routerLink]="['auth/edit-password']"> <span>Alterar Senha</span></a>
+                        </li>
+                        <li><a [routerLink]="['campanhas/minhas-campanhas']"><span>Minhas Campanhas</span></a></li>
+                        <li><a [routerLink]="['doacoes/minhas-doacoes']"><span>Minhas Doações</span></a></li>
+                        <li><a [routerLink]="['assinaturas/minhas-assinaturas']"><span>Minhas Assinaturas</span></a></li>
+                        <li><a [routerLink]="['adocoes/meus-pets']"><span>Meus PETS pra adoção</span></a></li>
+                        <li><a [routerLink]="['auth/wallet']"><span>Carteira</span></a></li>
+                        <li><a [routerLink]="['suporte/listar-suporte']"><span>Meus Tickets</span></a></li>
+                        <li><a (click)="logout()" style="color: white; cursor: pointer;"><span>Sair</span></a></li>
+                    </ul>
+                    <!-- MENU USUÁRIO LOGADO FIM-->
+                </li>
+            </ul>
+        </div>
+        <div class="aside-dropdown__item">
+            <div style="margin-bottom: 40px; text-align: center;">
+                <img class="header-logo__img" src="assets/img/logo_fundo_claro.png" width="90%" alt="logo" />
+            </div>
+            <div class="aside-inner">
+                <span class="aside-inner__title">E-mail</span><a class="aside-inner__link" href="mailto:contato@vaquinhaanimal.com.br">contato&#64;vaquinhaanimal.com.br</a>
+            </div>
+            <div class="aside-inner">
+                <span class="aside-inner__title">Telefone</span><a class="aside-inner__link" href="tel:+180012345678">+55 21 98745-4856</a>
+            </div>
+            <ul class="aside-socials">
+                <li class="aside-socials__item">
+                    <a class="aside-socials__link" target="_blank" href="https://www.instagram.com/vaquinhaanimal"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </li>
+                <li class="aside-socials__item">
+                    <a class="aside-socials__link" target="_blank" href="https://www.facebook.com/vaquinhaanimal"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+        </div>
+        <div class="aside-dropdown__item">
+            <a *ngIf="userLogado" class="button button--squared" (click)="logout()" style="margin-top: 10px; background-color: rgb(139, 0, 0); color: white; cursor: pointer;"><span>Sair</span></a>
+            <a *ngIf="!userLogado" [routerLink]="['auth/login']" class="button button--squared" style="margin-top: 10px; background-color: rgb(1, 75, 194); color: white; cursor: pointer;"><span>Entrar</span></a>
+            <a *ngIf="!userLogado" [routerLink]="['auth/register']" class="button button--squared" style="margin-top: 10px; background-color: rgb(7, 207, 0); color: white; cursor: pointer;"><span>Cadastrar</span></a>
+        </div>
+    </div>
+</div>
+<!-- aside dropdown end-->
+<!-- top bar start-->
+<div class="top-bar d-none d-lg-block">
+    <div class="container-fluid">
+        <div class="row align-items-end">
+            <div class="col-lg-9">
+                <a class="top-bar__link" href="tel:+180012345678">+55 21 99639-1869</a><a class="top-bar__link" href="mailto:contato&#64;vaquinhaanimal.com.br">contato&#64;vaquinhaanimal.com.br</a>
+            </div>
+            <div class="col-lg-3 text-right">
+                <ul class="socials">
+                    <li class="socials__item">
+                        <a class="socials__link" target="_blank" href="https://www.facebook.com/vaquinhaanimal"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                    </li>
+                    <li class="socials__item">
+                        <a class="socials__link" target="_blank" href="https://www.instagram.com/vaquinhaanimal"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- top bar end-->
+<!-- header start-->
+<header class="header header--front_3">
+    <div class="container-fluid">
+        <div class="row no-gutters justify-content-between">
+            <div class="col-auto d-flex align-items-center">
+                <div class="dropdown-trigger d-none d-sm-block">
+                    <div class="dropdown-trigger__item"></div>
+                </div>
+                <div class="header-logo">
+                    <a class="header-logo__link" href="index.html"><img class="header-logo__img" src="assets/img/logo_fundo_claro.png" alt="logo" /></a>
+                </div>
+            </div>
+            <div class="col-auto">
+                <!-- main menu start-->
+                <nav *ngIf="emailUsuario != 'contato@vaquinhaanimal.com.br'">
+                    <ul class="main-menu">
+                        <li class="main-menu__item main-menu__item--has-child">
+                            <a class="main-menu__link" [routerLink]="['homepage']"><span><i class="fa-solid fa-house"></i></span></a>
+                        </li>
+                        <li class="main-menu__item main-menu__item--has-child">
+                            <a class="main-menu__link" [routerLink]="['campanhas/listar-todas']"><span>Campanhas</span></a>
+                        </li>
+                        <li class="main-menu__item main-menu__item--has-child">
+                            <a class="main-menu__link" [routerLink]="['campanhas/criar']"><span>Crie a sua</span></a>
+                        </li>
+                        <li class="main-menu__item main-menu__item--has-child">
+                            <a class="main-menu__link" [routerLink]="['artigos/listar-todos']"><span>Artigos</span></a>
+                        </li>
+                        <li class="main-menu__item main-menu__item--has-child">
+                            <a class="main-menu__link" [routerLink]="['adocoes/listar-todas']"><span>Adote</span></a>
+                        </li>
+                        <!-- <li class="main-menu__item main-menu__item--has-child">
+                <a class="main-menu__link" [routerLink]="['contato']"><span>Contato</span></a>
+              </li> -->
+                        <li class="main-menu__item main-menu__item--has-child" *ngIf="!userLogado">
+                            <a class="main-menu__link" [routerLink]="['auth/login']"><span><strong>Entrar</strong></span></a>
+                        </li>
+                        <li class="main-menu__item main-menu__item--has-child" *ngIf="!userLogado">
+                            <a class="main-menu__link" [routerLink]="['auth/register']"><span><strong>Cadastrar</strong></span></a>
+                        </li>
+                        <li class="main-menu__item main-menu__item--has-child" *ngIf="userLogado"><a class="main-menu__link"><span><strong>{{nomeUsuario}}</strong></span></a>
+                            <!-- MENU USUÁRIO LOGADO -->
+                            <ul class="main-menu__sub-list sub-list">
+                                <li>
+                                    <a [routerLink]="['auth/edit-password']"> <span>Alterar Senha</span></a>
+                                </li>
+                                <li><a [routerLink]="['campanhas/minhas-campanhas']"><span>Minhas Campanhas</span></a></li>
+                                <li><a [routerLink]="['doacoes/minhas-doacoes']"><span>Minhas Doações</span></a></li>
+                                <li><a [routerLink]="['assinaturas/minhas-assinaturas']"><span>Minhas Assinaturas</span></a></li>
+                                <li><a [routerLink]="['adocoes/meus-pets']"><span>Meus PETS pra adoção</span></a></li>
+                                <li><a [routerLink]="['auth/wallet']"><span>Carteira</span></a></li>
+                                <li><a [routerLink]="['suporte/listar-suporte']"><span>Meus Tickets</span></a></li>
+                                <li><a (click)="logout()" style="color: white; cursor: pointer;"><span>Sair</span></a></li>
+                            </ul>
+                            <!-- MENU USUÁRIO LOGADO FIM-->
+                        </li>
+                    </ul>
+                </nav>
+
+                <nav *ngIf="emailUsuario == 'contato@vaquinhaanimal.com.br'">
+                    <ul class="main-menu">
+                        <li class="main-menu__item main-menu__item--has-child" *ngIf="userLogado"><a class="main-menu__link"><span><strong>Admin</strong></span></a>
+                            <!-- MENU USUÁRIO LOGADO -->
+                            <ul class="main-menu__sub-list sub-list">
+                                <li><a [routerLink]="['campanhas/listar-todos-admin']"><span>Campanhas</span></a></li>
+                                <li>
+                                    <a [routerLink]="['doacoes/listar-todos-admin']"> <span>Doações</span></a>
+                                </li>
+                                <li><a [routerLink]="['artigos/listar-todos-admin']"><span>Artigos</span></a></li>
+                                <li><a [routerLink]="['suporte/listar-suporte-admin']"><span>Tickets</span></a></li>
+                                <li><a [routerLink]="['assinaturas/listar-todos-admin']"><span>Assinaturas</span></a></li>
+                                <li><a (click)="logout()" style="color: white; cursor: pointer;"><span>Sair</span></a></li>
+                            </ul>
+                            <!-- MENU USUÁRIO LOGADO FIM-->
+                        </li>
+                    </ul>
+                </nav>
+                <!-- main menu end-->
+            </div>
+            <div class="col-auto d-flex align-items-center">
+                <!-- lang select start-->
+                <ul class="lang-select">
+                    <li class="lang-select__item--active"><span>Pt</span>
+                        <!-- <ul class="lang-select__sub-list">
+                <li><a href="#">French</a></li>
+                <li><a href="#">Spanish</a></li>
+                <li><a href="#">Deutsch</a></li>
+                <li><a href="#">Russian</a></li>
+              </ul> -->
+                    </li>
+                </ul>
+                <!-- lang select end-->
+                <a class="button button--squared" [routerLink]="['campanhas/listar-todas']"><span>Quero salvar um pet</span></a>
+                <div class="dropdown-trigger d-block d-sm-none">
+                    <div class="dropdown-trigger__item"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- header end-->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownTrigger = document.querySelector('.dropdown-trigger');
+        const asideDropdown = document.querySelector('.aside-dropdown');
+        const asideClose = document.querySelector('.aside-dropdown__close');
+
+        if (dropdownTrigger) {
+            dropdownTrigger.addEventListener('click', function() {
+                asideDropdown.classList.add('open');
+            });
+        }
+
+        if (asideClose) {
+            asideClose.addEventListener('click', function() {
+                asideDropdown.classList.remove('open');
+            });
+        }
+
+        window.addEventListener('click', function(event) {
+            if (!asideDropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                asideDropdown.classList.remove('open');
+            }
+        });
+    });
+</script>

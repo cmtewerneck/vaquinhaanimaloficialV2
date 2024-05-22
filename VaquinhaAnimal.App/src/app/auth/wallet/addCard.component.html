@@ -1,0 +1,200 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+    <!-- section start-->
+    <section class="section" style="text-align: center; padding-top: 100px;">
+        <div class="container">
+            <div class="row margin-bottom">
+                <div class="col-12">
+                    <h2 class="heading__title"><span>Adicionar</span> <span> cartão</span></h2>
+                </div>
+            </div>
+            <!-- FORM START HERE-->
+            <section class="section contacts no-padding-top no-padding-bottom">
+                <div class="contacts-wrapper">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-xl-8">
+                                <form class="form message-form" [formGroup]="cartaoForm" autocomplete="on">
+                                    <h6 class="form__title">Preencha com suas informações</h6><span class="form__text">* campos obrigatórios</span>
+
+                                    <!-- LINHA 1 -->
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <input class="form__field" mask="9999 9999 9999 9999" style="margin-bottom: 0;" formControlName="number" placeholder="Número do cartão *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('number')?.hasError('required') && this.cartaoForm.get('number')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <select class="form__field" formControlName="brand" style="color: #6e6e6e; margin-bottom: 0;" required="required">
+                                                <option value="" disabled selected hidden>Bandeira *</option>
+                                                <option value="Elo">Elo</option>
+                                                <option value="Mastercard">Mastercard</option>
+                                                <option value="Visa">Visa</option>
+                                                <option value="Amex">Amex</option>
+                                                <option value="JCB">JCB</option>
+                                                <option value="Aura">Aura</option>
+                                                <option value="Hipercard">Hipercard</option>
+                                                <option value="Diners">Diners</option>
+                                                <option value="Discover">Discover</option>
+                                            </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('brand')?.hasError('required') && this.cartaoForm.get('brand')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 2 -->
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-lg-6">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="holder_name" placeholder="Nome Completo *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('holder_name')?.hasError('required') && this.cartaoForm.get('holder_name')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <input class="form__field" mask="000.000.000-00" style="margin-bottom: 0;" formControlName="holder_document" placeholder="CPF *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('holder_document')?.hasError('required') && this.cartaoForm.get('holder_document')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 3 -->
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-lg-4">
+                                            <select class="form__field" formControlName="exp_month" style="color: #6e6e6e; margin-bottom: 0;" required="required">
+                                                <option value="" disabled selected hidden>Mês de validade *</option>
+                                                <option value="01">Janeiro</option>
+                                                <option value="02">Fevereiro</option>
+                                                <option value="03">Março</option>
+                                                <option value="04">Abril</option>
+                                                <option value="05">Maio</option>
+                                                <option value="06">Junho</option>
+                                                <option value="07">Julho</option>
+                                                <option value="08">Agosto</option>
+                                                <option value="09">Setembro</option>
+                                                <option value="10">Outubro</option>
+                                                <option value="11">Novembro</option>
+                                                <option value="12">Dezembro</option>
+                                            </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('exp_month')?.hasError('required') && this.cartaoForm.get('exp_month')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <input class="form__field" mask="0000" style="margin-bottom: 0;" formControlName="exp_year" placeholder="Ano de validade *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('exp_year')?.hasError('required') && this.cartaoForm.get('exp_year')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <input class="form__field" mask="9999" style="margin-bottom: 0;" formControlName="cvv" placeholder="CVV *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('cvv')?.hasError('required') && this.cartaoForm.get('cvv')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 4 -->
+                                    <div class="row" style="margin-top: 20px;" formGroupName="billing_address">
+                                        <div class="col-lg-8">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="line_1" placeholder="Endereço *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('line_1')?.hasError('required') && this.cartaoForm.get('line_1')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="line_2" placeholder="Complemento *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('line_2')?.hasError('required') && this.cartaoForm.get('line_2')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 5 -->
+                                    <div class="row" style="margin-top: 20px;" formGroupName="billing_address">
+                                        <div class="col-lg-6">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="city" placeholder="Cidade *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('city')?.hasError('required') && this.cartaoForm.get('city')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <select class="form__field" formControlName="state" style="color: #6e6e6e; margin-bottom: 0;" required="required">
+                                                <option value="" disabled selected hidden>Estado *</option>
+                                                <option value="AC">Acre</option>
+                                                <option value="AL">Alagoas</option>
+                                                <option value="AP">Amapá</option>
+                                                <option value="AM">Amazonas</option>
+                                                <option value="BA">Bahia</option>
+                                                <option value="CE">Ceará</option>
+                                                <option value="DF">Distrito Federal</option>
+                                                <option value="ES">Espírito Santo</option>
+                                                <option value="GO">Goiás</option>
+                                                <option value="MA">Maranhão</option>
+                                                <option value="MT">Mato Grosso</option>
+                                                <option value="MS">Mato Grosso do Sul</option>
+                                                <option value="MG">Minas Gerais</option>
+                                                <option value="PA">Pará</option>
+                                                <option value="PB">Paraíba</option>
+                                                <option value="PR">Paraná</option>
+                                                <option value="PE">Pernambuco</option>
+                                                <option value="PI">Piauí</option>
+                                                <option value="RJ">Rio de Janeiro</option>
+                                                <option value="RN">Rio Grande do Norte</option>
+                                                <option value="RS">Rio Grande do Sul</option>
+                                                <option value="RO">Rondônia</option>
+                                                <option value="RR">Roraima</option>
+                                                <option value="SC">Santa Catarina</option>
+                                                <option value="SP">São Paulo</option>
+                                                <option value="SE">Sergipe</option>
+                                                <option value="TO">Tocantins</option>
+                                            </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('state')?.hasError('required') && this.cartaoForm.get('state')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 6 -->
+                                    <div class="row" style="margin-top: 20px;" formGroupName="billing_address">
+                                        <div class="col-lg-6">
+                                            <select class="form__field" formControlName="country" style="color: #6e6e6e; margin-bottom: 0;" required="required">
+                                                <option value="" disabled selected hidden>País *</option>
+                                                <option value="BR">Brasil</option>
+                                            </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('country')?.hasError('required') && this.cartaoForm.get('country')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <input class="form__field" mask="00000-000" style="margin-bottom: 0;" formControlName="zip_code" placeholder="CEP *" required="required" />
+                                            <div class="text-danger alertFormError" *ngIf="this.cartaoForm.get('zip_code')?.hasError('required') && this.cartaoForm.get('zip_code')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- BOTÕES -->
+                                    <div class="col-12" style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit" (click)="adicionarCartao()" [disabled]="!cartaoForm.valid" [ngStyle]="{'background-color': !cartaoForm.valid ? '#D3D3D3' : ''}">Cadastrar</button>
+                                        <button class="form__submit" (click)="resetForm()" style="margin-left: 10px;">Limpar</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- FORM END HERE-->
+        </div>
+    </section>
+    <!-- section end-->
+
+
+</main>

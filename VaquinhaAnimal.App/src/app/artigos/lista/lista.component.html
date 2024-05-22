@@ -1,0 +1,63 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+  <section class="promo-primary">
+    <picture>
+      <source srcset="assets/img/artigo_background.png" media="(min-width: 992px)"/><img class="img--bg" src="assets/img/artigo_background.png" alt="img"/>
+    </picture>
+    <div class="container">
+      <div class="row">
+        <div class="col-auto">
+          <div class="align-container">
+            <div class="align-container__item"><span class="promo-primary__pre-title">Explore</span>
+              <h1 class="promo-primary__title"><span>Nossos</span> <span> Artigos</span></h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- causes inner start-->
+  <section class="section causes-inner">
+    <div class="container" *ngIf="artigos">
+      <div class="row offset-margin">
+        
+        <!-- CARD REPETIDOR -->
+        <div class="col-md-6 col-lg-6"  *ngFor="let artigo of artigos">
+          <div class="causes-item causes-item--primary">
+            <div class="causes-item__body">
+              <div class="causes-item__top">
+                <h6 class="causes-item__title" style="text-align: center;"> <a [routerLink]="['/artigos/detalhes', artigo.url_artigo]">{{artigo.titulo}}</a></h6>
+                <p style="text-align: left; font-size: 12px;">Escrito por {{artigo.escrito_por}}</p>
+              </div>
+              <div class="causes-item__img">
+                <img *ngIf="artigo.foto_capa != null" class="img--bg" src="{{ imagens }}{{ artigo.foto_capa }}">
+                <img *ngIf="artigo.foto_capa == null" class="img--bg" src="assets/img/noImage.png" alt="Card image cap">
+              </div>
+              <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" [routerLink]="['/artigos/detalhes', artigo.url_artigo]">+ Ler Completo</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="!artigos || artigos.length == 0" style="text-align: center;">
+      <h5 style="text-align: center;">Não há artigos até o momento!</h5>
+    </div>
+  </section>
+  <!-- causes inner end-->
+  
+  <!-- bottom bg start-->
+  <section class="bottom-background background--brown">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="bottom-background__img"><img src="assets/img/bottom-bg.png" alt="img"/></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- bottom bg end-->
+</main>

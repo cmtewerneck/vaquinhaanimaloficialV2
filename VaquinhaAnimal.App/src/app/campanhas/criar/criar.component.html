@@ -1,0 +1,382 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+    <section class="promo-primary">
+        <picture>
+            <source srcset="assets/img/create_campanha.jpg" media="(min-width: 992px)" /><img class="img--bg" src="assets/img/create_campanha.jpg" alt="img" />
+        </picture>
+        <div class="promo-primary__description" style="bottom: 10px;"> <span>Nós podemos</span></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="align-container">
+                        <div class="align-container__item"><span class="promo-primary__pre-title">Crie</span>
+                            <h1 class="promo-primary__title"><span>Sua</span> <span> Campanha</span></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- section start-->
+    <section class="section" style="text-align: center; padding-top: 100px;">
+        <div class="container">
+            <div class="row margin-bottom">
+                <div class="col-12">
+                    <h2 class="heading__title"><span>Crie</span> <span> sua campanha</span></h2>
+                </div>
+            </div>
+            <!-- FORM START HERE-->
+            <section class="section contacts no-padding-top no-padding-bottom">
+                <div class="contacts-wrapper">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-xl-10">
+                                <form class="form message-form" [formGroup]="campanhaForm" autocomplete="on">
+                                    <!-- INÍCIO DO FORMULÁRIO -->
+                                    <h6 class="form__title">Preencha com todas as informações</h6><span class="form__text">* campos obrigatórios</span>
+
+                                    <!-- LINHA 1 -->
+                                    <div class="row" style="margin-top: 20px;">
+                                        <!-- ITEM 1 -->
+                                        <div class="col-lg-8">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="titulo" placeholder="Título * (sugestão: máx 30 caracteres)" required="required" maxlength="100" [(ngModel)]="titulo_card" />
+                                            <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('titulo')?.hasError('required') && this.campanhaForm.get('titulo')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('titulo')?.hasError('minlength') && this.campanhaForm.get('titulo')?.touched">
+                                                Mínimo 3 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('titulo')?.hasError('maxlength') && this.campanhaForm.get('titulo')?.touched">
+                                                Máximo 100 caracteres
+                                            </div>
+                                        </div>
+                                        <!-- ITEM 2 -->
+                                        <div class="col-lg-4 space-top-input">
+                                            <select class="form__field" formControlName="tipo_campanha" style="color: #6e6e6e; margin-bottom: 0;" required="required" (change)="tipoCampanhaSelected($event)">
+                        <option value="" disabled selected hidden>Tipo da Campanha *</option>
+                        <option value=1>Única - com duração</option>
+                        <option value=2>Recorrente - sem duração</option>
+                      </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('tipo_campanha')?.hasError('required') && this.campanhaForm.get('tipo_campanha')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 2 -->
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-lg-4" *ngIf="!campanhaRecorrente">
+                                            <select formControlName="duracao_dias" class="form__field" style="color: #6e6e6e; margin-bottom: 0;">
+                        <option value="" disabled selected hidden>Duração *</option>
+                        <option value=30>30 dias</option>
+                        <option value=60>60 dias</option>
+                        <option value=90>90 dias</option>
+                        <option value=120>120 dias</option>
+                        <option value=150>150 dias</option>
+                        <option value=180>180 dias</option>
+                      </select>
+                                        </div>
+                                        <div class="col-lg-8 space-top-input" [ngClass]="{ 'col-lg-12': campanhaRecorrente}">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="descricao_curta" placeholder="Descrição Curta * (sugestão: máx 100 caracteres)" required="required" maxlength="200" [(ngModel)]="descricao_curta_card">
+                                            <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('descricao_curta')?.hasError('required') && this.campanhaForm.get('descricao_curta')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('descricao_curta')?.hasError('minlength') && this.campanhaForm.get('descricao_curta')?.touched">
+                                                Mínimo 5 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('descricao_curta')?.hasError('maxlength') && this.campanhaForm.get('descricao_curta')?.touched">
+                                                Máximo 200 caracteres
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 3 -->
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-lg-12">
+                                            <textarea class="form__message form__field" style="margin-bottom: 0;" formControlName="descricao_longa" placeholder="Descrição Completa *" cols="40" rows="10" maxlength="5000"></textarea>
+                                            <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('descricao_longa')?.hasError('required') && this.campanhaForm.get('descricao_longa')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('descricao_longa')?.hasError('minlength') && this.campanhaForm.get('descricao_longa')?.touched">
+                                                Mínimo 500 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('descricao_longa')?.hasError('maxlength') && this.campanhaForm.get('descricao_longa')?.touched">
+                                                Máximo 5000 caracteres
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 4 -->
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-lg-8">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="video_url" placeholder="Link do vídeo (opcional)" maxlength="100">
+                                        </div>
+
+                                        <div class="col-lg-4 space-top-input">
+                                            <select class="form__field" formControlName="tag_campanha" style="color: #6e6e6e; margin-bottom: 0;" required="required" [(ngModel)]="tag_campanha">
+                        <option value="" disabled selected hidden>Tag da Campanha *</option>
+                        <option value=1>Alimentação</option>
+                        <option value=2>Medicamentos</option>
+                        <option value=3>Cirurgias</option>
+                        <option value=4>Tratamentos</option>
+                        <option value=5>Acessórios</option>
+                        <option value=6>Puro Amor</option>
+                        <option value=7>Outros</option>
+                      </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('tag_campanha')?.hasError('required') && this.campanhaForm.get('tag_campanha')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 5 -->
+                                    <div class="row" style="text-align: left; margin-top: 20px;">
+                                        <div class="col-lg-12">
+                                            <label class="form__checkbox-label"><span class="form__label-text">Li e aceito os <a target="_blank" href="/termos">Termos *</a></span>
+                        <input class="form__input-checkbox" style="margin-bottom: 0;" type="checkbox" formControlName="termos"/><span class="form__checkbox-mask form__checkbox-mask"></span>
+                      </label>
+                                            <div class="text-danger alertFormError" style="text-align: left; margin-bottom: 20px;" *ngIf="this.campanhaForm.get('termos')?.hasError('required') && this.campanhaForm.get('termos')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 6 -->
+                                    <div class="row" style="text-align: left;">
+                                        <div class="col-lg-12">
+                                            <label class="form__checkbox-label"><span class="form__label-text">Quero realizar campanha <a href="#" data-toggle="modal" data-target="#premium">Premium</a></span>
+                        <input class="form__input-checkbox" style="margin-bottom: 0;" type="checkbox" formControlName="premium"/><span class="form__checkbox-mask form__checkbox-mask"></span>
+                      </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 7 -->
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-lg-4"></div>
+                                        <div class="col-lg-4">
+                                            <div>
+                                                <label class="control-label"><strong>Valor Desejado *</strong></label>
+                                                <input class="form__field" style="margin-bottom: 0;" formControlName="valor_desejado" placeholder="Valor Desejado *" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left', allowNegative: 'false' }" required="required" />
+                                                <!-- <input class="form__field" style="margin-bottom: 0;" formControlName="valor_desejado" placeholder="Valor Desejado *" currencyMask required="required" /> -->
+                                                <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('valor_desejado')?.hasError('required') && this.campanhaForm.get('valor_desejado')?.touched">
+                                                    * Campo obrigatório
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4"></div>
+                                        </div>
+                                    </div>
+
+                                    <h6 class="form__title" style="margin: 60px 0 30px;">Dados do Beneficiário</h6>
+
+                                    <div class="alert alert--warning alert--filled">
+                                        <div class="alert__icon">
+                                            <svg class="icon">
+                        <use xlink:href="#warning"></use>
+                      </svg>
+                                        </div>
+                                        <p class="alert__text" style="font-size: 16px;"><strong style="font-size: 16px;">Atenção!</strong> O beneficiário deve ter no mínimo 18 anos. Caso contrário haverá problema na hora do repasse</p>
+                                    </div>
+
+                                    <!-- LINHA 8 -->
+                                    <div class="row" [formGroup]="beneficiarioForm" style="margin-top: 20px;">
+                                        <div class="col-lg-6">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="nome" placeholder="Nome Completo *" maxlength="100">
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('nome')?.hasError('required') && this.beneficiarioForm.get('nome')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('nome')?.hasError('maxlength') && this.beneficiarioForm.get('nome')?.touched">
+                                                Máximo 100 caracteres
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <select class="form__field space-top-input" formControlName="tipo" style="color: #6e6e6e; margin-bottom: 0;" required="required" (change)="documentSelected($event)">
+                        <option value="" disabled selected hidden>Documento *</option>
+                        <option value="individual">CPF</option>
+                        <option value="company">CNPJ</option>
+                      </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('tipo')?.hasError('required') && this.beneficiarioForm.get('tipo')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <!--<input class="form__field space-top-input" style="margin-bottom: 0;" formControlName="documento" required="required" placeholder="Número *" /> -->
+                                            <input class="form__field space-top-input" style="margin-bottom: 0;" formControlName="documento" mask={{document_mask}}  required="required" placeholder="Número *"/>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('documento')?.hasError('required') && this.beneficiarioForm.get('documento')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h6 class="form__title" style="margin: 60px 0 30px;">Conta Bancária do Beneficiário</h6>
+
+                                    <!-- LINHA 9 -->
+                                    <div class="row" [formGroup]="beneficiarioForm" style="margin-top: 20px;">
+                                        <div class="col-lg-8">
+                                            <select class="form__field" formControlName="codigo_banco" style="color: #6e6e6e; margin-bottom: 0;" required="required">
+                        <option value="" disabled selected hidden>Código do Banco *</option>
+                        <option *ngFor="let banco of bancos" value="{{banco.value}}">{{banco.value}} - {{banco.label}}</option>
+                      </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('codigo_banco')?.hasError('required') && this.beneficiarioForm.get('codigo_banco')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <select class="form__field space-top-input" formControlName="tipo_conta" style="color: #6e6e6e; margin-bottom: 0;" required="required">
+                        <option value="" disabled selected hidden>Tipo Conta *</option>
+                        <option value="checking">Corrente</option>
+                        <option value="savings">Poupança</option>
+                      </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('tipo_conta')?.hasError('required') && this.beneficiarioForm.get('tipo_conta')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 10 -->
+                                    <div class="row" [formGroup]="beneficiarioForm" style="margin-top: 20px;">
+                                        <div class="col-lg-3">
+                                            <input mask="9999" class="form__field" style="margin-bottom: 0;" formControlName="numero_agencia" required="required" placeholder="Agência *" maxlength="4" />
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_agencia')?.hasError('required') && this.beneficiarioForm.get('numero_agencia')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_agencia')?.hasError('pattern') && this.beneficiarioForm.get('numero_agencia')?.touched">
+                                                Somente números
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_agencia')?.hasError('maxlength') && this.beneficiarioForm.get('numero_agencia')?.touched">
+                                                Máximo 4 caracteres
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 space-top-input">
+                                            <input mask="9" class="form__field" style="margin-bottom: 0;" formControlName="digito_agencia" placeholder="Dígito" maxlength="1" />
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('digito_agencia')?.hasError('maxlength') && this.beneficiarioForm.get('digito_agencia')?.touched">
+                                                Máximo 1 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('digito_agencia')?.hasError('pattern') && this.beneficiarioForm.get('numero_agencia')?.touched">
+                                                Somente números
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 space-top-input">
+                                            <input mask="9999999999999" style="margin-bottom: 0;" class="form__field" formControlName="numero_conta" required="required" placeholder="Conta *" maxlength="13" />
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_conta')?.hasError('required') && this.beneficiarioForm.get('numero_conta')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_conta')?.hasError('pattern') && this.beneficiarioForm.get('numero_agencia')?.touched">
+                                                Somente números
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_conta')?.hasError('maxlength') && this.beneficiarioForm.get('numero_conta')?.touched">
+                                                Máximo 13 caracteres
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 space-top-input">
+                                            <input mask="99" class="form__field" style="margin-bottom: 0;" formControlName="digito_conta" required="required" placeholder="Dígito *" maxlength="2" />
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('digito_conta')?.hasError('required') && this.beneficiarioForm.get('digito_conta')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('digito_conta')?.hasError('pattern') && this.beneficiarioForm.get('numero_agencia')?.touched">
+                                                Somente números
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('digito_conta')?.hasError('maxlength') && this.beneficiarioForm.get('digito_conta')?.touched">
+                                                Máximo 2 caracteres
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 11 IMAGEM -->
+                                    <div class="row" style="margin-top: 60px;">
+                                        <!-- CARD -->
+                                        <div class="col-lg-6">
+                                            <div class="causes-item causes-item--primary">
+                                                <div class="causes-item__body">
+                                                    <div class="causes-item__top">
+                                                        <h6 class="causes-item__title"> <a href="cause-details.html" class="ellipsis">{{titulo_card}}</a></h6>
+                                                        <p>{{descricao_curta_card}}</p>
+                                                    </div>
+                                                    <div class="causes-item__img">
+                                                        <div class="causes-item__badge" style="background-color: #49C2DF">{{tag_campanha | tagCampanha}}</div><img class="img--bg" [src]="imgSrc | safe" alt="img" />
+                                                    </div>
+                                                    <div class="causes-item__lower">
+                                                        <div class="progress-bar">
+                                                            <div class="progress-bar__inner" style="width: 100%;">
+                                                                <div class="progress-bar__value">100%</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="causes-item__details-holder">
+                                                            <div class="causes-item__details-item"><span>Objetivo: </span><span>R$ 10.000,00</span></div>
+                                                            <div class="causes-item__details-item text-right"><span>Atingido: </span><span>R$ 10.000,00</span></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- UPLOAD IMAGEM -->
+                                        <div class="col-lg-6">
+                                            <h6 class="form__title" style="text-align: left;">Imagem de Capa (opcional)</h6>
+                                            <p style="text-align: left;">Campanhas com foto de capa e vídeo chamam muito mais atenção e podem ter mais facilidade para alcançar os objetivos</p>
+                                            <p style="text-align: left;">Formatos válidos: png, jpg, jpeg (máx 2 mb)</p>
+
+                                            <div class="custom-file">
+                                                <input type="file" accept="image/jpeg,image/png,image/jpg" class="custom-file-input" (change)="fileChangeEvent($event)">
+                                                <label data-browse="Procurar" style="width: 400px" class="custom-file-label"></label>
+
+                                                <div *ngIf='imagemNome' style="text-align: left;"><br><strong>Arquivo selecionado:</strong> {{ imagemNome }} <br></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12" style="text-align: center; margin-top: 50px;">
+                                        <button class="form__submit" (click)="removerFoto()" style="margin-left: 10px;">Remover Foto</button>
+                                    </div>
+
+                                    <!-- BOTÕES -->
+                                    <div class="col-12" style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit" (click)="adicionarCampanha()" [disabled]="!campanhaForm.valid" [ngStyle]="{'background-color': !campanhaForm.valid ? '#D3D3D3' : ''}">Criar</button>
+                                        <button class="form__submit" type="reset" (click)="removerFoto()" style="margin-left: 10px;">Limpar</button>
+                                    </div>
+
+                                    <!-- <div>
+                    {{this.campanhaForm.value|json}}
+                  </div> -->
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- FORM END HERE-->
+        </div>
+    </section>
+    <!-- section end-->
+
+
+</main>
+
+
+<!-- Modal PREMIUM -->
+<div class="modal fade" id="premium" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <p>As campanhas PREMIUM terão destaque na plataforma e também serão as mais divulgadas nas mídias da Vaquinha Animal.
+                </p>
+                <p>Você não precisará pagar nada agora para isso. Ao final da campanha, a Vaquinha ficará com 5% do valor arrecadado além da comissão já estabelecida nos termos.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Ciente</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+.alertFormError{
+    text-align: left; 
+}
+@media (max-width: 992px){
+    .space-top-input{
+        margin-top: 20px;
+    }
+}
+.ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    overflow: hidden;
+    width: 20em;
+  }

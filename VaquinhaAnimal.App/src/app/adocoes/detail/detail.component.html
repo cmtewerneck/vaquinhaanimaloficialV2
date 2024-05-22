@@ -1,0 +1,170 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+    <section class="promo-primary">
+        <picture>
+            <source srcset="assets/img/detalhe_adocao.png" media="(min-width: 992px)" /><img class="img--bg" src="assets/img/detalhe_adocao.png" alt="img" />
+        </picture>
+        <div class="promo-primary__description" style="bottom: 15px;"> <span>Ajude</span></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="align-container">
+                        <div class="align-container__item"><span class="promo-primary__pre-title">Detalhes</span>
+                            <h1 class="promo-primary__title"><span>{{ adocao.nome_pet }}</span></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- donation start-->
+    <section class="section donation" style="padding-bottom: 50px;"><img class="donation__bg" src="assets/img/donation_img.png" alt="img" />
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="donation-item">
+                        <div class="donation-item__img"><img class="img--bg" src="{{ imagens }}{{ adocao.foto }}" alt="img" style="object-fit: fill;" /></div>
+                        <div class="donation-item__body">
+                            <div class="row">
+                                <div class="col-12" style="text-align: center;">
+                                    <h5 class="donation-item__title" style="font-size: 40px;">{{ adocao.nome_pet }}</h5>
+                                    <p style="text-align: center; margin-top: 40px;" *ngIf="adocao.descricao != ''">{{ adocao.descricao }}</p>
+                                    <p style="text-align: center; margin-top: 40px;" *ngIf="adocao.descricao == ''">Nenhuma descrição informada</p>
+                                </div>
+                            </div>
+
+                            <!-- BOTOES EXTERNOS -->
+                            <!-- <div style="text-align: center; margin-top: 30px;">
+                <button class="form__submit__success" type="submit">+ PIX Rápido</button>
+                <button class="form__submit__primary" type="submit" style="margin-left: 20px;">+ Quero Doar</button>
+              </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- donation end-->
+
+
+    <section class="section" style="padding-top: 60px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row" style="margin-bottom: 30px;">
+                        <div class="col-12">
+                            <h5 class="donation-item__title" style="text-align: center; margin-bottom: 20px;">Informações do PET</h5>
+                        </div>
+                    </div>
+                    <!-- cause details tabs start-->
+                    <div class="tabs horizontal-tabs cause-details-tabs">
+                        <div class="horizontal-tabs__content">
+                            <div class="horizontal-tabs__item" id="horizontal-tabs__item-1">
+
+                                <div class="row" style="text-align: center;">
+                                    <div class="col-md-4">
+                                        <h6>Castrado</h6>
+                                        <p>{{ adocao.castrado | boolPipe }}</p>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <h6>Faixa Etária</h6>
+                                        <p>{{adocao.faixa_etaria | faixaEtaria }}</p>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <h6>Anunciante</h6>
+                                        <p>{{adocao.tipo_anunciante | tipoAnunciante }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="row" style="text-align: center; margin-top: 50px;">
+                                    <div class="col-md-4" *ngIf="adocao.tipo_anunciante == 1">
+                                        <h6>Abrigo</h6>
+                                        <p>{{adocao.abrigo_nome}}</p>
+                                    </div>
+
+                                    <div class="col-md-4" *ngIf="adocao.tipo_anunciante == 2">
+                                        <h6>Empresa</h6>
+                                        <p>{{adocao.empresa_nome}}</p>
+                                    </div>
+
+                                    <div class="col-md-4" *ngIf="adocao.tipo_anunciante == 3">
+                                        <h6>Anunciante</h6>
+                                        <p>{{adocao.particular_nome}}</p>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <h6>E-mail</h6>
+                                        <p>{{adocao.email }}</p>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <h6>Telefone</h6>
+                                        <a style="text-decoration: none;" target="_blank" href="https://api.whatsapp.com/send?text=Vamos%20ajudar%20nessa%20adoção.%0a%0ahttps://www.vaquinhaanimal.com.br/adocoes/listar-todas">{{adocao.celular | mask:'(00) 90000-0000'}}</a>
+                                        <!-- <a style="text-decoration: none;" target="_blank" href="https://api.whatsapp.com/send?text=Vamos%20ajudar%20nessa%20adoção.%0a%0ahttps://www.vaquinhaanimal.com.br/adocoes/listar-todas">{{adocao.celular}}</a> -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- cause details tabs end-->
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="row" style="margin-bottom: 30px; margin-top: 80px;">
+                        <div class="col-12">
+                            <h5 class="donation-item__title" style="text-align: center;">Vídeo</h5>
+                        </div>
+                    </div>
+                    <!-- cause details tabs start-->
+                    <div class="tabs horizontal-tabs cause-details-tabs">
+                        <div class="horizontal-tabs__content">
+                            <div class="horizontal-tabs__item" id="horizontal-tabs__item-1" style="text-align: center;">
+                                <p *ngIf="adocao.link_video == '' || adocao.link_video == null" style="color: #777777; font-size: 15px;">Nenhum vídeo cadastrado</p>
+                                <p *ngIf="adocao.link_video != '' && adocao.link_video != null" style="color: #777777; font-size: 15px;">
+                                    <iframe width="560px" height="315px" [src]="adocao.link_video | safe" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- cause details tabs end-->
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="row" style="margin-bottom: 30px; margin-top: 80px;">
+                        <div class="col-12">
+                            <h5 class="donation-item__title" style="text-align: center;">Ficou Interessado?</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" style="display: inline-block; text-align: center;">
+                            <a *ngIf="adocao.facebook" target="_blank" href="{{ adocao.facebook }}">
+                                <img src="assets/img/facebook_icon.png">
+                            </a>
+                            <a *ngIf="adocao.instagram" style="margin-left: 10px;" target="_blank" href="{{ adocao.instagram }}">
+                                <img src="assets/img/instagram_icon.png">
+                            </a>
+                            <a *ngIf="adocao.celular" style="margin-left: 10px;" target="_blank" href="https://wa.me/{{adocao.celular}}?text=Ol%C3%A1.+Venho+da+plataforma+Vaquinha+Animal+e+estou+interessado+em+adotar+um+pet+que+voc%C3%AA+est%C3%A1+divulgando.">
+                                <img src="assets/img/whatsapp_icon.png">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <a class="form__submit" href="javascript:history.back()">Voltar</a>
+            </div>
+        </div>
+    </section>
+
+</main>

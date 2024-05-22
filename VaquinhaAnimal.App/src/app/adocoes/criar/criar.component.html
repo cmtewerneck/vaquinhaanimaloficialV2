@@ -1,0 +1,266 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+    <section class="promo-primary">
+        <picture>
+            <source srcset="assets/img/adote_background.png" media="(min-width: 992px)" /><img class="img--bg" src="assets/img/adote_background.png" alt="img" />
+        </picture>
+        <div class="promo-primary__description" style="bottom: 10px;"> <span>Eles merecem</span></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="align-container">
+                        <div class="align-container__item"><span class="promo-primary__pre-title">Coloque um pet</span>
+                            <h1 class="promo-primary__title"><span>Pra</span> <span> Adoção</span></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- section start-->
+    <section class="section" style="text-align: center; padding-top: 100px;">
+        <div class="container">
+            <div class="row margin-bottom">
+                <div class="col-12">
+                    <h2 class="heading__title"><span>Cadastre</span> <span> um PET</span></h2>
+                </div>
+            </div>
+            <!-- FORM START HERE-->
+            <section class="section contacts no-padding-top no-padding-bottom">
+                <div class="contacts-wrapper">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-xl-10">
+                                <form class="form message-form" [formGroup]="adocaoForm" autocomplete="on">
+                                    <!-- INÍCIO DO FORMULÁRIO -->
+                                    <h6 class="form__title">Preencha com todas as informações</h6><span class="form__text">* campos obrigatórios</span>
+
+                                    <!-- LINHA 1 -->
+                                    <div class="row" style="margin-top: 20px;">
+
+                                        <div class="col-lg-6">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="nome_pet" placeholder="Nome do Pet * (máx 50 caracteres)" required="required" maxlength="50" [(ngModel)]="nome_pet_card" />
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('nome_pet')?.hasError('required') && this.adocaoForm.get('nome_pet')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('nome_pet')?.hasError('minlength') && this.adocaoForm.get('nome_pet')?.touched">
+                                                Mínimo 3 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('nome_pet')?.hasError('maxlength') && this.adocaoForm.get('nome_pet')?.touched">
+                                                Máximo 50 caracteres
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 space-top-input">
+                                            <select class="form__field" formControlName="tipo_pet" style="color: #6e6e6e; margin-bottom: 0;" required="required" [(ngModel)]="tipo_pet_card">
+                          <option value="" disabled selected hidden>Tipo de Pet *</option>
+                          <option value=1>Cachorro</option>
+                          <option value=2>Gato</option>
+                          <option value=3>Pássaro</option>
+                          <option value=4>Coelho</option>
+                          <option value=5>Outros</option>
+                        </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('tipo_pet')?.hasError('required') && this.adocaoForm.get('tipo_pet')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 space-top-input">
+                                            <select class="form__field" formControlName="castrado" style="color: #6e6e6e; margin-bottom: 0;" required="required">
+                          <option value="" disabled selected hidden>Castrado *</option>
+                          <option value=true>Sim</option>
+                          <option value=false>Não</option>
+                        </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('castrado')?.hasError('required') && this.adocaoForm.get('castrado')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 2 -->
+                                    <div class="row" style="margin-top: 20px;">
+
+                                        <div class="col-lg-3">
+                                            <select class="form__field" formControlName="tipo_anunciante" style="color: #6e6e6e; margin-bottom: 0;" required="required" (change)="anuncianteSelected($event)">
+                          <option value="" disabled selected hidden>Tipo de anunciante *</option>
+                          <option value=1>Abrigo</option>
+                          <option value=2>Empresa</option>
+                          <option value=3>Particular</option>
+                        </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('tipo_anunciante')?.hasError('required') && this.adocaoForm.get('tipo_anunciante')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-9" *ngIf="tipoAnuncianteToggle == 'abrigo'">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="abrigo_nome" placeholder="Nome do Abrigo" maxlength="50" />
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('abrigo_nome')?.hasError('minlength') && this.adocaoForm.get('abrigo_nome')?.touched">
+                                                Mínimo 3 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('abrigo_nome')?.hasError('maxlength') && this.adocaoForm.get('abrigo_nome')?.touched">
+                                                Máximo 50 caracteres
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-9" *ngIf="tipoAnuncianteToggle == 'empresa'">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="empresa_nome" placeholder="Nome da Empresa" maxlength="50" />
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('empresa_nome')?.hasError('minlength') && this.adocaoForm.get('empresa_nome')?.touched">
+                                                Mínimo 3 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('empresa_nome')?.hasError('maxlength') && this.adocaoForm.get('empresa_nome')?.touched">
+                                                Máximo 50 caracteres
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-9" *ngIf="tipoAnuncianteToggle == 'particular'">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="particular_nome" placeholder="Nome do Anunciante" maxlength="50" />
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('particular_nome')?.hasError('minlength') && this.adocaoForm.get('particular_nome')?.touched">
+                                                Mínimo 3 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('particular_nome')?.hasError('maxlength') && this.adocaoForm.get('particular_nome')?.touched">
+                                                Máximo 50 caracteres
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- LINHA 3 -->
+                                    <div class="row" style="margin-top: 20px;">
+
+                                        <div class="col-lg-3">
+                                            <select class="form__field" formControlName="faixa_etaria" style="color: #6e6e6e; margin-bottom: 0;" required="required">
+                          <option value="" disabled selected hidden>Faixa Etária *</option>
+                          <option value=1>De 0 a 6 meses</option>
+                          <option value=2>De 7 a 12 meses</option>
+                          <option value=3>De 1 a 3 anos</option>
+                          <option value=4>De 4 a 6 anos</option>
+                          <option value=5>Acima de 6 anos</option>
+                        </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('faixa_etaria')?.hasError('required') && this.adocaoForm.get('faixa_etaria')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 space-top-input">
+                                            <input class="form__field" style="margin-bottom: 0;" mask="(00) 0000-0000||(00) 0 0000-0000" formControlName="celular" placeholder="Celular" maxlength="20" [(ngModel)]="celular_card" />
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('celular')?.hasError('minlength') && this.adocaoForm.get('celular')?.touched">
+                                                Mínimo 6 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('celular')?.hasError('maxlength') && this.adocaoForm.get('celular')?.touched">
+                                                Máximo 20 caracteres
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 space-top-input">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="email" placeholder="E-mail *" required="required" maxlength="100" />
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('email')?.hasError('required') && this.adocaoForm.get('email')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('email')?.hasError('email') && this.adocaoForm.get('email')?.touched">
+                                                * Formato inválido
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('email')?.hasError('minlength') && this.adocaoForm.get('email')?.touched">
+                                                Mínimo 3 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('email')?.hasError('maxlength') && this.adocaoForm.get('email')?.touched">
+                                                Máximo 100 caracteres
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- LINHA 4 -->
+                                    <div class="row" style="margin-top: 20px;">
+
+                                        <div class="col-lg-6">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="instagram" placeholder="Instagram (link completo)" maxlength="200" />
+                                        </div>
+
+                                        <div class="col-lg-6 space-top-input">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="facebook" placeholder="Facebook (link completo)" maxlength="200" />
+                                        </div>
+
+                                    </div>
+
+                                    <!-- LINHA 5 -->
+                                    <div class="row" style="margin-top: 20px;">
+
+                                        <div class="col-lg-12">
+                                            <textarea class="form__message form__field" style="margin-bottom: 0;" formControlName="descricao" placeholder="Conte a história desse pet *" cols="40" rows="10" maxlength="1000"></textarea>
+                                            <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('faixa_etaria')?.hasError('required') && this.adocaoForm.get('faixa_etaria')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- LINHA 6 -->
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-lg-12">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="link_video" placeholder="URL de vídeo (opcional)" />
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 7 IMAGEM -->
+                                    <div class="row" style="margin-top: 60px;">
+                                        <!-- CARD -->
+                                        <div class="col-lg-6">
+                                            <div class="causes-item causes-item--primary">
+                                                <div class="causes-item__body">
+                                                    <div class="causes-item__top">
+                                                        <h6 class="causes-item__title"> <a href="cause-details.html" class="ellipsis">{{ nome_pet_card }}</a></h6>
+                                                        <p>{{ celular_card | mask:'(00) 90000-0000' }}</p>
+                                                    </div>
+                                                    <div class="causes-item__img">
+                                                        <div class="causes-item__badge" style="background-color: #49C2DF">{{ tipo_pet_card | tipoPet }}</div><img class="img--bg" [src]="imgSrc | safe" alt="img" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- UPLOAD IMAGEM -->
+                                        <div class="col-lg-6">
+                                            <h6 class="form__title" style="text-align: left;">Foto do PET (opcional)</h6>
+                                            <p style="text-align: left;">Pets com foto de capa e vídeo chamam muito mais atenção e podem ter mais facilidade de serem adotados</p>
+                                            <p style="text-align: left;">Formatos válidos: png, jpg, jpeg (máx 2 mb)</p>
+
+                                            <div class="custom-file">
+                                                <input type="file" accept="image/jpeg,image/png,image/jpg" class="custom-file-input" (change)="fileChangeEvent($event)">
+                                                <label data-browse="Procurar" style="width: 400px" class="custom-file-label"></label>
+
+                                                <div *ngIf='imagemNome' style="text-align: left;"><br><strong>Arquivo selecionado:</strong> {{ imagemNome }} <br></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12" style="text-align: center; margin-top: 50px;">
+                                        <button class="form__submit" (click)="removerFoto()" style="margin-left: 10px;">Remover Foto</button>
+                                    </div>
+
+                                    <!-- BOTÕES -->
+                                    <div class="col-12" style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit" (click)="adicionarAdocao()" [disabled]="!adocaoForm.valid" [ngStyle]="{'background-color': !adocaoForm.valid ? '#D3D3D3' : ''}">Criar</button>
+                                        <button class="form__submit" type="reset" (click)="removerFoto()" style="margin-left: 10px;">Limpar</button>
+                                    </div>
+
+                                    <!-- <div>
+                      {{this.adocaoForm.value|json}}
+                    </div> -->
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- FORM END HERE-->
+        </div>
+    </section>
+    <!-- section end-->
+
+
+</main>

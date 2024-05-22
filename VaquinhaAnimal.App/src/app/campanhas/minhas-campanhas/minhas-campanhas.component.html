@@ -1,0 +1,177 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+  <!-- MINHAS CAMPANHAS-->
+  <section class="section causes-inner" style="padding-top: 100px;">
+    <h2 class="heading__title" style="text-align: center; margin-bottom: 60px;"><span>Minhas</span> <span> Campanhas</span></h2>
+    
+    <div class="container">
+      
+      <!-- INÍCIO TABELA -->
+      <div class="table-responsive">
+        <table class="table table-striped" *ngIf="campanhasPaginado && campanhasPaginado.data.length">
+          <thead>
+            <tr>
+              <th scope="col">Título</th>
+              <th scope="col">Status</th>
+              <th scope="col">Início</th>
+              <th scope="col">Objetivo</th>
+              <th scope="col">Arrecadado</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let campanha of campanhasPaginado.data">
+              <td scope="row">{{ campanha.titulo }}</td>
+              <td scope="row">{{ campanha.status_campanha | statusCampanha }}</td>
+              <td>{{ campanha.data_inicio | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ campanha.valor_desejado | currency }}</td>
+              <td>{{ campanha.total_arrecadado | currency }}</td>
+              <td>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Ações
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#" style="text-decoration: none;" [ngClass]="{ 'disabled': campanha.status_campanha != 1}" data-toggle="modal" data-target="#enviarParaAnalise" (click)="salvarId(campanha.id)">Enviar para análise</a>
+                  <a class="dropdown-item" href="#" style="text-decoration: none;" [ngClass]="{ 'disabled': campanha.status_campanha != 1}" [routerLink]="['/campanhas/editar', campanha.url_campanha]">Editar</a>
+                  <a class="dropdown-item" href="#" style="text-decoration: none;" [ngClass]="{ 'disabled': campanha.status_campanha != 3}" data-toggle="modal" data-target="#pararCampanha" (click)="salvarId(campanha.id)">Finalizar</a>
+                  <a class="dropdown-item" href="#" style="text-decoration: none;" [ngClass]="{ 'disabled': campanha.status_campanha != 4}" data-toggle="modal" data-target="#baixarRelatorio" (click)="salvarId(campanha.id)">Baixar Relatório</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#" style="text-decoration: none;" [ngClass]="{ 'disabled': campanha.status_campanha != 1 && campanha.status_campanha != 2}" data-toggle="modal" data-target="#excluir" (click)="salvarId(campanha.id)">Excluir</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- FIM TABELA -->
+      
+      <div *ngIf="!campanhasPaginado || campanhasPaginado.data.length == 0" style="text-align: center;">
+        <img src="assets/img/topo_minhas_campanhas.png" width="600px" alt="donor" style="margin-bottom: 40px;"/>
+        
+        <h5 style="text-align: center;">Você não possui campanhas até o momento!</h5>
+        <a [routerLink]="['/campanhas/criar']" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Criar campanha</a>
+      </div>
+      
+      <!-- PAGINADOR -->
+      <div class="container" *ngIf="campanhasPaginado && campanhasPaginado.data && campanhasPaginado.data.length != 0">
+        <div class="row">
+          <div class="col-12">
+            <!-- pagination start-->
+            <ul class="pagination">
+              <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--prev" (click)="previousOrNext('previous')"><i class="fa fa-angle-left" aria-hidden="true"></i><span>Página Anterior</span></li>
+              
+              <div *ngFor="let i of paginasPaginador">
+                <li class="pagination__item" [ngClass]="{ 'pagination__item--active': pageNumber == i}" (click)="pageChanged(i)"><span>{{i}}</span></li>
+              </div>
+              
+              <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--next" (click)="previousOrNext('next')"><span>Próxima Página</span><i class="fa fa-angle-right" aria-hidden="true"></i></li>
+            </ul>
+            <!-- pagination end-->
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+  <!--MINHAS CAMPANHAS END-->
+  
+  <!-- bottom bg start-->
+  <section class="bottom-background background--brown">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="bottom-background__img"><img src="assets/img/bottom-bg.png" alt="img"/></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- bottom bg end-->
+</main>
+
+
+<!-- Modal ENVIAR PARA ANÁLISE-->
+<div class="modal fade" id="enviarParaAnalise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirma envio?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Sua campanha será enviada para análise. Não será mais possível editá-la!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="limparId()">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="enviarParaAnalise()" data-dismiss="modal">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal ENVIAR PARA ANÁLISE-->
+<div class="modal fade" id="baixarRelatorio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirma download?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Você receberá o relatório final da sua campanha.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="limparId()">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="baixarRelatorio()" data-dismiss="modal">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal PARAR CAMPANHA-->
+<div class="modal fade" id="pararCampanha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirma finalizar?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Sua campanha será finalizada. Não será mais possível reiniciá-la!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="limparId()">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="pararCampanha()" data-dismiss="modal">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal EXCLUIR -->
+<div class="modal fade" id="excluir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirma Exclusão?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Sua campanha será excluída. Tem certeza disso?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="limparId()">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="deletarCampanha()" data-dismiss="modal">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>

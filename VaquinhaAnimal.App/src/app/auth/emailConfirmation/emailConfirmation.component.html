@@ -1,0 +1,24 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<section style="padding-top: 150px; background-color:snow">
+    <div class="container" data-aos="fade-up">
+        <div class="container">
+
+            <div *ngIf="emailConfirmed" style="text-align: center;">
+                <img src="assets/img/confirmed.png" width="20%" />
+                <h3 style="margin-top: 50px;">E-mail confirmado. Faça Login</h3>
+                <div class="col-12" style="text-align: center; margin-top: 30px; margin-bottom: 30px;">
+                    <button class="form__submit" [routerLink]="['/auth/login']">Acessar a plataforma</button>
+                </div>
+            </div>
+
+            <div *ngIf="!emailConfirmed" style="text-align: center;">
+                <img src="assets/img/negativo.png" />
+                <h3 style="margin-top: 50px;">E-mail não confirmado. Entre em contato conosco através do e-mail contato&#64;doadoresespeciais.com.br</h3>
+            </div>
+
+        </div>
+    </div>
+</section>

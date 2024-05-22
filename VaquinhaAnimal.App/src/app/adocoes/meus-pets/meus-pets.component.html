@@ -1,0 +1,155 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+  <!-- MINHAS CAMPANHAS-->
+  <section class="section causes-inner" style="padding-top: 100px;">
+    <h2 class="heading__title" style="text-align: center; margin-bottom: 60px;"><span>MEUS PETS</span> <span> para Adoção</span></h2>
+    <div *ngIf="adocoesPaginado && adocoesPaginado.data.length != 0" style="text-align: center; margin-bottom: 30px;">
+      <a [routerLink]="['/adocoes/criar']" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Cadastrar PET</a>
+    </div>
+
+    <div class="container">
+      
+      <!-- INÍCIO TABELA -->
+      <div class="table-responsive">
+        <table class="table table-striped" *ngIf="adocoesPaginado && adocoesPaginado.data.length">
+          <thead>
+            <tr>
+              <th scope="col">Nome</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Faixa Etária</th>
+              <th scope="col">Status</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let adocao of adocoesPaginado.data">
+              <td scope="row">{{ adocao.nome_pet }}</td>
+              <td>{{ adocao.tipo_pet | tipoPet }}</td>
+              <td>{{ adocao.faixa_etaria | faixaEtaria }}</td>
+              <td *ngIf="adocao.adotado == true">Adotado</td>
+              <td *ngIf="adocao.adotado == false">Listado</td>
+              <td>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Ações
+                </button>
+                <div class="dropdown-menu">
+                  <a *ngIf="adocao.adotado == false" class="dropdown-item" href="#" style="text-decoration: none;" data-toggle="modal" data-target="#marcarAdotado" (click)="salvarId(adocao.id)">Foi Adotado</a>
+                  <a *ngIf="adocao.adotado == true" class="dropdown-item" href="#" style="text-decoration: none;" data-toggle="modal" data-target="#marcarListado" (click)="salvarId(adocao.id)">Listar para adoção</a>
+                  <a class="dropdown-item" href="#" style="text-decoration: none;" data-toggle="modal" data-target="#excluir" (click)="salvarId(adocao.id)">Excluir</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- FIM TABELA -->
+      
+      <div *ngIf="!adocoesPaginado || adocoesPaginado.data.length == 0" style="text-align: center;">
+        <img src="assets/img/topo_minhas_campanhas.png" width="600px" alt="donor" style="margin-bottom: 40px;"/>
+        
+        <h5 style="text-align: center;">Você não possui pets cadastrados até o momento!</h5>
+        <a [routerLink]="['/adocoes/criar']" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Cadastrar PET</a>
+      </div>
+      
+      <!-- PAGINADOR -->
+      <div class="container" *ngIf="adocoesPaginado && adocoesPaginado.data && adocoesPaginado.data.length != 0">
+        <div class="row">
+          <div class="col-12">
+            <!-- pagination start-->
+            <ul class="pagination">
+              <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--prev" (click)="previousOrNext('previous')"><i class="fa fa-angle-left" aria-hidden="true"></i><span>Página Anterior</span></li>
+              
+              <div *ngFor="let i of paginasPaginador">
+                <li class="pagination__item" [ngClass]="{ 'pagination__item--active': pageNumber == i}" (click)="pageChanged(i)"><span>{{i}}</span></li>
+              </div>
+              
+              <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--next" (click)="previousOrNext('next')"><span>Próxima Página</span><i class="fa fa-angle-right" aria-hidden="true"></i></li>
+            </ul>
+            <!-- pagination end-->
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+  <!--MINHAS CAMPANHAS END-->
+  
+  <!-- bottom bg start-->
+  <section class="bottom-background background--brown">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="bottom-background__img"><img src="assets/img/bottom-bg.png" alt="img"/></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- bottom bg end-->
+</main>
+
+
+<!-- Modal MARCAR COMO ADOTADO-->
+<div class="modal fade" id="marcarAdotado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirma adoção?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Seu pet será considerado adotado. Futuramente poderá reverter e listá-lo novamente.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="limparId()">Cancelar</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="marcarAdotado()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal MARCAR COMO LISTADO-->
+<div class="modal fade" id="marcarListado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirma ação?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Seu pet será considerado listado para adoção.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="limparId()">Cancelar</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="marcarListado()">Listar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal EXCLUIR -->
+<div class="modal fade" id="excluir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirma Exclusão?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Seu pet será excluído. Tem certeza disso?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="limparId()">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="deletarAdocao()" data-dismiss="modal">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+    <section class="promo-primary">
+        <picture>
+            <source srcset="assets/img/adote_list_background.png" media="(min-width: 992px)" /><img class="img--bg" src="assets/img/adote_list_background.png" alt="img" />
+        </picture>
+        <div class="promo-primary__description" style="bottom: 10px;"> <span>Eles merecem</span></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="align-container">
+                        <div class="align-container__item"><span class="promo-primary__pre-title">Explore</span>
+                            <h1 class="promo-primary__title"><span>Pets</span> <span> para Adoção</span></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- causes inner start-->
+    <section class="section causes-inner">
+        <div class="container" *ngIf="adocoesPaginado">
+            <div class="row offset-margin">
+
+                <!-- CARD REPETIDOR -->
+                <div class="col-md-6 col-lg-4" *ngFor="let adocao of adocoesPaginado.data">
+                    <div class="causes-item causes-item--primary">
+                        <div class="causes-item__body" style="padding-bottom: 20px;">
+                            <div class="causes-item__top">
+                                <h6 class="causes-item__title"> <a href="cause-details.html">{{adocao.nome_pet}}</a></h6>
+                                <p style="text-align: center;">Contato: {{ adocao.celular | mask:'(00) 90000-0000' }}</p>
+                                <p style="text-align: center;">Faixa Etária: {{ adocao.faixa_etaria | faixaEtaria }}</p>
+                            </div>
+                            <div class="causes-item__img">
+                                <div class="causes-item__badge" style="background-color: #49C2DF">{{adocao.tipo_pet | tipoPet}}</div>
+                                <img *ngIf="adocao.foto != null" class="img--bg" src="{{ imagens }}{{ adocao.foto }}">
+                                <img *ngIf="adocao.foto == null" class="img--bg" src="assets/img/noImage.png" alt="Card image cap">
+                            </div>
+                            <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" [routerLink]="['/adocoes/detalhes', adocao.url_adocao]">+ Quero Conhecer Mais</a></div>
+                            <div style="text-align: center;">
+                                <ul class="aside-socials" style="margin-top: 20px;">
+                                    <li *ngIf="adocao.instagram" class="aside-socials__item">
+                                        <a class="aside-socials__link" target="_blank" href="{{ adocao.instagram }}"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li *ngIf="adocao.facebook" class="aside-socials__item">
+                                        <a class="aside-socials__link" target="_blank" href="{{ adocao.facebook }}"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="adocoesPaginado && (!adocoesPaginado.data || adocoesPaginado.data.length == 0)" style="text-align: center;">
+            <h5 style="text-align: center;">Não há pets para adoção até o momento!</h5>
+            <a class="button causes-item__button button--primary" style="margin-top: 25px; cursor: pointer;" [routerLink]="['/adocoes/criar']">+ Listar um PET</a>
+        </div>
+
+        <div *ngIf="adocoesPaginado && adocoesPaginado.data.length != 0" style="text-align: center;">
+            <a class="button causes-item__button button--primary" style="margin-top: 70px; cursor: pointer;" [routerLink]="['/adocoes/criar']">+ Listar um PET</a>
+        </div>
+
+
+
+        <!-- PAGINADOR -->
+        <div class="container" *ngIf="adocoesPaginado && adocoesPaginado.data && adocoesPaginado.data.length != 0">
+            <div class="row">
+                <div class="col-12">
+                    <!-- pagination start-->
+                    <ul class="pagination">
+                        <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--prev" (click)="previousOrNext('previous')"><i class="fa fa-angle-left" aria-hidden="true"></i><span>Página Anterior</span></li>
+
+                        <div *ngFor="let i of paginasPaginador">
+                            <li class="pagination__item" [ngClass]="{ 'pagination__item--active': pageNumber == i}" (click)="pageChanged(i)"><span>{{i}}</span></li>
+                        </div>
+
+                        <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--next" (click)="previousOrNext('next')"><span>Próxima Página</span><i class="fa fa-angle-right" aria-hidden="true"></i></li>
+                    </ul>
+                    <!-- pagination end-->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- causes inner end-->
+
+    <!-- bottom bg start-->
+    <section class="bottom-background background--brown">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="bottom-background__img"><img src="assets/img/bottom-bg.png" alt="img" /></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- bottom bg end-->
+</main>

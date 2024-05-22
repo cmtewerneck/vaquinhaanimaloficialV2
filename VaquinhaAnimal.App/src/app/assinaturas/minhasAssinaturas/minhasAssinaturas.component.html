@@ -1,0 +1,106 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+  <!-- MINHAS ASSINATURAS-->
+  <section class="section causes-inner" style="padding-top: 100px;">
+    <h2 class="heading__title" style="text-align: center; margin-bottom: 60px;"><span>Minhas</span> <span> Assinaturas</span></h2>
+    
+    <div class="container">
+      
+      <!-- INÍCIO TABELA -->
+      <div class="table-responsive">
+        <table class="table table-striped" *ngIf="assinaturas && assinaturas.data.length">
+          <thead>
+            <tr>
+              <th scope="col">Início</th>
+              <th scope="col">Valor</th>
+              <th scope="col">Cancelada</th>
+              <th scope="col">Status</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let assinatura of assinaturas.data">
+              <td>{{ assinatura.start_at | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ assinatura.items[0].pricing_scheme.price / 100 | currency:'BRL' }}</td>
+              <td>{{ assinatura.canceled_at | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ assinatura.status | statusAssinatura }}</td>
+              <td>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Ações
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#" style="text-decoration: none;" data-toggle="modal" data-target="#cancelarAssinatura" (click)="salvarId(assinatura.id)">Cancelar Assinatura</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- FIM TABELA -->
+      
+      <div *ngIf="!assinaturas || assinaturas.data.length == 0" style="text-align: center;">
+        <img src="assets/img/topo_minhas_campanhas.png" width="600px" alt="donor" style="margin-bottom: 40px;"/>
+        
+        <h5 style="text-align: center;">Você não possui assianturas até o momento!</h5>
+        <a [routerLink]="['/campanhas/listar-todas']" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Procurar campanha pra doar</a>
+      </div>
+      
+      <!-- PAGINADOR -->
+      <div class="container" *ngIf="assinaturas && assinaturas.data && assinaturas.data.length != 0">
+        <div class="row">
+          <div class="col-12">
+            <!-- pagination start-->
+            <ul class="pagination">
+              <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--prev" (click)="previousOrNext('previous')"><i class="fa fa-angle-left" aria-hidden="true"></i><span>Página Anterior</span></li>
+              
+              <div *ngFor="let i of paginasPaginador">
+                <li class="pagination__item" [ngClass]="{ 'pagination__item--active': pageNumber == i}" (click)="pageChanged(i)"><span>{{i}}</span></li>
+              </div>
+              
+              <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--next" (click)="previousOrNext('next')"><span>Próxima Página</span><i class="fa fa-angle-right" aria-hidden="true"></i></li>
+            </ul>
+            <!-- pagination end-->
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+  <!--MINHAS ASSINATURAS END-->
+  
+  <!-- bottom bg start-->
+  <section class="bottom-background background--brown">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="bottom-background__img"><img src="assets/img/bottom-bg.png" alt="img"/></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- bottom bg end-->
+</main>
+
+<!-- Modal EXCLUIR -->
+<div class="modal fade" id="cancelarAssinatura" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirma Exclusão?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Sua assinatura será cancelada. Tem certeza disso?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="limparId()">Desistir</button>
+        <button type="button" class="btn btn-success" (click)="cancelarAssinatura()" data-dismiss="modal">Cancelar Assinatura</button>
+      </div>
+    </div>
+  </div>
+</div>

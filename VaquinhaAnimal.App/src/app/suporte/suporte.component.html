@@ -1,0 +1,145 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+  <!-- MEUS ARTIGOS -->
+  <section class="section" style="padding-top: 100px;">
+    <h2 class="heading__title" style="text-align: center; margin-bottom: 60px;"><span>Tickets</span> <span> de Suporte</span></h2>
+    
+    <div class="container">
+      
+      <!-- INÍCIO TABELA -->
+      <div class="table-responsive" *ngIf="tickets && tickets.length">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Abertura</th>
+              <th scope="col">Assunto</th>
+              <th scope="col" style="text-align: center;">Mensagem</th>
+              <th scope="col" style="text-align: center;">Resposta</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody *ngIf="tickets && tickets.length">
+            <tr *ngFor="let ticket of tickets">
+              <td scope="row">{{ ticket.data | date:'dd/MM/yyyy' }}</td>
+              <td>{{ ticket.assunto }}</td>
+              <td style="text-align: center;"><a class="btn btn-primary" style="text-decoration: none; cursor: pointer; color: white;" (click)="verMensagem(mensagem, ticket.mensagem)">Ler Mensagem</a></td>
+              <td style="text-align: center;"><a class="btn btn-primary" style="text-decoration: none; cursor: pointer; color: white;" [ngClass]="{ 'disabled': !ticket.respondido}" (click)="verMensagem(resposta, ticket.resposta)">Ler Resposta</a></td>
+              <td style="text-align: right;">
+                <a class="btn btn-danger" style="text-decoration: none; cursor: pointer; color: white;" (click)="deletarTicket(ticket.id)"><i class="fa-sharp fa-solid fa-trash"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- FIM TABELA -->
+      
+      <div *ngIf="!tickets || tickets.length == 0" style="text-align: center;">
+        <h5 style="text-align: center;">Você não possui tickets até o momento!</h5>
+        <a *ngIf="!newTicketToggle" (click)="changeTicketToggle()" style="cursor: pointer; margin-top: 25px; text-decoration: none; color: white;" class="btn btn-primary">Abrir Ticket</a>
+      </div>
+      
+      <div style="text-align: center; margin-top: 80px;" *ngIf="tickets && tickets.length != 0">
+        <a *ngIf="!newTicketToggle" (click)="changeTicketToggle()" style="cursor: pointer; margin-top: 25px; text-decoration: none; color: white;" class="btn btn-primary">Abrir Ticket</a>
+      </div>
+      
+      <!-- FORM NEW TICKET -->
+      <section class="section contacts no-padding-bottom" style="padding-top: 80px;">
+        <div class="contacts-wrapper">
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-xl-8">
+                <form class="form message-form" *ngIf="newTicketToggle" [formGroup]="newTicketForm">
+                  <!-- INÍCIO DO FORMULÁRIO -->
+                  <h4 style="text-align: center; margin-bottom: 40px;">Criando novo ticket</h4>
+                  <h6 class="form__title">Preencha com todas as informações</h6><span class="form__text">* campos obrigatórios</span>
+
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <input class="form__field" style="margin-bottom: 0;" formControlName="assunto" required="required" placeholder="Assunto *"/>
+                      <div class="text-danger alertFormError" *ngIf="this.newTicketForm.get('assunto')?.hasError('required') && this.newTicketForm.get('assunto')?.touched">
+                        Campo obrigatório
+                      </div>
+                      <div class="text-danger alertFormError" *ngIf="this.newTicketForm.get('assunto')?.hasError('maxlength') && this.newTicketForm.get('assunto')?.touched">
+                        Máximo 100 caracteres
+                      </div>
+                      <div class="text-danger alertFormError" *ngIf="this.newTicketForm.get('assunto')?.hasError('minLength') && this.newTicketForm.get('assunto')?.touched">
+                        Mínimo 3 caracteres
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="row" style="margin-top: 20px;">
+                    <div class="col-lg-12">
+                      <textarea class="form__field" style="margin-bottom: 0;" maxlength="1000" formControlName="mensagem" rows="5" required="required" placeholder="Mensagem * (máx 1000 caracteres)"></textarea>
+                      <div class="text-danger alertFormError" *ngIf="this.newTicketForm.get('mensagem')?.hasError('required') && this.newTicketForm.get('mensagem')?.touched">
+                        Campo obrigatório
+                      </div>
+                      <div class="text-danger alertFormError" *ngIf="this.newTicketForm.get('mensagem')?.hasError('maxlength') && this.newTicketForm.get('mensagem')?.touched">
+                        Máximo 500 caracteres
+                      </div>
+                      <div class="text-danger alertFormError" *ngIf="this.newTicketForm.get('mensagem')?.hasError('minlength') && this.newTicketForm.get('mensagem')?.touched">
+                        Mínimo 3 caracteres
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="text-center" style="margin-top: 20px;">
+                    <button class="form__submit" (click)="criarTicket()" [disabled]="!newTicketForm.valid" [ngStyle]="{'background-color': !newTicketForm.valid ? '#D3D3D3' : ''}">Criar</button>
+                    <button class="form__submit" (click)="changeTicketToggle()" style="margin-left: 20px;">Cancelar</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+    </div>
+    
+    
+  </section>
+  <!--MINHAS CAMPANHAS END-->
+</main>
+
+<!-- MODAL MENSAGEM ENVIADA -->
+<ng-template #mensagem>
+  <div class="modal-header">
+    <h5 class="modal-title">Sua Mensagem</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="text-align: center;">
+    <div>
+      <p>
+        {{mensagemEnviada}}
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="closeModal()">Cancelar</button>
+  </div>
+</ng-template>
+
+<!-- MODAL RESPOSTA -->
+<ng-template #resposta>
+  <div class="modal-header">
+    <h5 class="modal-title">Resposta da Equipe</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="text-align: center;">
+    <div>
+      <p>
+        {{mensagemEnviada}}
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="closeModal()">Cancelar</button>
+  </div>
+</ng-template>

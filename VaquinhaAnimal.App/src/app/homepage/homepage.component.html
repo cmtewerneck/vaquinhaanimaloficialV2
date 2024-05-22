@@ -1,0 +1,366 @@
+<main class="main">
+    <!-- promo start-->
+    <section class="promo promo--front_3">
+        <div class="promo-slider">
+            <div class="promo-slider__item promo-slider__item--style-3">
+                <picture>
+                    <source srcset="assets/img/slider_1.jpg" media="(min-width: 835px)" />
+                    <source srcset="assets/img/slider_1_reduzido.jpg" media="(min-width: 376px)" /><img class="img--bg" src="assets/img/slider_1_reduzido.jpg" alt="img" />
+                </picture>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-6 offset-xl-6 text-left">
+                            <div class="align-container">
+                                <div class="align-container__item">
+                                    <div class="promo-slider__wrapper-1">
+                                        <h2 class="promo-slider__title"><span>Ajudamos animais</span><br/><span>por todo Brasil</span></h2>
+                                    </div>
+                                    <div class="promo-slider__wrapper-2">
+                                        <p class="promo-slider__subtitle" style="text-align: justify;">Esses seres incríveis precisam cada vez mais da nossa ajuda e com uma pequena contribuição, juntos podemos transformar a situação de cada pet em necessidade no Brasil.</p>
+                                    </div>
+                                    <div class="promo-slider__wrapper-3"><a class="button promo-slider__button button--primary" [routerLink]="['campanhas']">Explorar Campanhas</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="promo-slider__item promo-slider__item--style-2">
+                <picture>
+                    <source srcset="assets/img/slider_2.jpg" media="(min-width: 835px)" />
+                    <source srcset="assets/img/slider_2_reduzido.jpg" media="(min-width: 376px)" /><img class="img--bg" src="assets/img/slider_2_reduzido.jpg" alt="img" />
+                </picture>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-7">
+                            <div class="align-container">
+                                <div class="align-container__item">
+                                    <div class="promo-slider__wrapper-1">
+                                        <h2 class="promo-slider__title"><span>Juntos</span><br/><span>Faremos a diferença</span></h2>
+                                    </div>
+                                    <div class="promo-slider__wrapper-2">
+                                        <p class="promo-slider__subtitle">Além das doações, adote um pet e faça com que ele possa ter uma vida melhor.</p>
+                                    </div>
+                                    <div class="promo-slider__wrapper-3"><a class="button promo-slider__button button--primary" [routerLink]="['/adocoes/listar-todas']">Adotar</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="promo-slider__item promo-slider__item--style-1">
+                <picture>
+                    <source srcset="assets/img/slider_3.jpg" media="(min-width: 835px)" />
+                    <source srcset="assets/img/slider_3_reduzido.jpg" media="(min-width: 376px)" /><img class="img--bg" src="assets/img/slider_3_reduzido.jpg" alt="img" />
+                </picture>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="align-container">
+                                <div class="align-container__item">
+                                    <div class="promo-slider__wrapper-1">
+                                        <h2 class="promo-slider__title"><span>Nós podemos</span><br/><span>e eles merecem.</span></h2>
+                                    </div>
+                                    <div class="promo-slider__wrapper-3">
+                                        <a class="button promo-slider__button button--primary" [routerLink]="['/campanhas/listar-todas']">Campanhas</a>
+                                        <a class="button promo-slider__button button--primary inlineBtns" [routerLink]="['/campanhas/criar']">Crie a sua</a>
+                                        <!-- <a class="button promo-slider__button button--primary" [routerLink]="['/campanhas/criar']" style="margin-left: 20px;">Crie a sua</a> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- promo pannel start-->
+        <!-- <div class="promo-pannel">
+      <div class="promo-pannel__video"><img class="img--bg" src="assets/img/video_background.jpg" alt="image"/><a class="video-trigger" href="https://www.youtube.com/watch?v=_sI_Ps7JSEk"><span>Assistir vídeo</span><i class="fa fa-play" aria-hidden="true"></i></a></div>
+    </div> -->
+        <!-- promo pannel end-->
+        <!-- slider nav start-->
+        <div class="slider__nav slider__nav--promo">
+            <div class="promo-slider__count"></div>
+            <div class="slider__arrows">
+                <div class="slider__prev"><i class="fa fa-chevron-left" aria-hidden="true"></i>
+                </div>
+                <div class="slider__next"><i class="fa fa-chevron-right" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+        <!-- slider nav end-->
+    </section>
+    <!-- promo end-->
+
+    <!-- CAMPANHAS PREMIUM -->
+    <!-- <section *ngIf="numeroCampanhas" class="section causes background--brown"><img class="causes__bg" src="assets/img/causes_img.png" alt="img" /> -->
+    <section *ngIf="campanhas && campanhas.length" class="section causes background--brown"><img class="causes__bg" src="assets/img/causes_img.png" alt="img" />
+        <div class="container">
+            <div class="row margin-bottom">
+                <div class="col-12">
+                    <div class="heading heading--primary heading--center"><span class="heading__pre-title">Confira nossas</span>
+                        <h2 class="heading__title"><span>Campanhas</span> <span> em destaque</span></h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row offset-margin">
+                <div class="col-12">
+                    <div class="items-slider-wrapper">
+                        <div class="items-slider">
+
+                            <!-- Destaque 1 -->
+                            <div class="items-slider__item" *ngFor="let campanha of campanhas">
+                                <div class="causes-item causes-item--style-3 causes-item--slider no-padding">
+                                    <div class="causes-item__body">
+                                        <div class="row align-items-center">
+                                            <div class="col-xl-8">
+                                                <div class="causes-item__img">
+                                                    <!-- slider nav start-->
+                                                    <div class="slider__nav items-slider__nav">
+                                                        <div class="slider__arrows">
+                                                            <div class="slider__prev"><i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                                            </div>
+                                                            <div class="slider__next"><i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- slider nav end--><img *ngIf="campanha.imagens.length != 0" class="img--bg" src="{{ imagens }}{{ campanha.imagens[0].arquivo }}" alt="img" />
+                                                    <!-- slider nav end--><img *ngIf="campanha.imagens.length == 0" class="img--bg" src="assets/img/lion.jpg" alt="img" />
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="causes-item__wrapper">
+                                                    <div class="causes-item__action">
+                                                        <div class="causes-item__badge" style="background-color: #49C2DF">{{ campanha.tag_campanha | tagCampanha }}</div>
+                                                    </div>
+                                                    <div class="causes-item__top">
+                                                        <h6 class="causes-item__title"> {{ campanha.titulo }}</h6>
+                                                        <p>{{ campanha.descricao_curta }}</p>
+                                                    </div>
+                                                    <div class="causes-item__lower">
+                                                        <div class="progress-bar">
+                                                            <div class="progress-bar__inner" [ngStyle]="{width: getWidth(campanha.percentual_arrecadado!)}">
+                                                                <div class="progress-bar__value">{{campanha.percentual_arrecadado!}}%</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="causes-item__details-holder">
+                                                            <div class="causes-item__details-item"><span>Objetivo: </span><span>{{ campanha.valor_desejado | currency }}</span></div>
+                                                            <div class="causes-item__details-item text-right"><span>Arrecadado: </span><span>{{ campanha.total_arrecadado | currency }}</span></div>
+                                                        </div>
+
+                                                        <div style="text-align: center;">
+                                                            <a class="causes-item__button button button--primary" [routerLink]="['/campanhas/detalhes', campanha.url_campanha]">+ Quero Doar</a>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- CAMPANHAS PREMIUM FINAL -->
+
+    <!-- OBJETIVOS -->
+    <section class="section">
+        <div class="container">
+            <div class="row margin-bottom">
+                <div class="col-12">
+                    <div class="heading heading--primary heading--center"><span class="heading__pre-title">Objetivos das doações na</span>
+                        <h2 class="heading__title"><span>Vaquinha</span> <span>Animal</span></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row offset-margin">
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="icon-item">
+                        <div class="icon-item__img"><img src="assets/img/svg/2_animal_shelter.svg" alt="icon" /></div>
+                        <div class="icon-item__text">
+                            <p>Medicamentos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="icon-item">
+                        <div class="icon-item__img"><img src="assets/img/svg/pet-food.png" alt="icon" /></div>
+                        <div class="icon-item__text">
+                            <p>Alimentação</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="icon-item">
+                        <div class="icon-item__img"><img src="assets/img/svg/surgeon.png" alt="icon" /></div>
+                        <div class="icon-item__text">
+                            <p>Cirurgias</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="icon-item">
+                        <div class="icon-item__img"><img src="assets/img/svg/x-ray.png" alt="icon" /></div>
+                        <div class="icon-item__text">
+                            <p>Tratamentos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="icon-item">
+                        <div class="icon-item__img"><img src="assets/img/svg/pet_wheel.png" alt="icon" /></div>
+                        <div class="icon-item__text">
+                            <p>Acessórios</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="icon-item">
+                        <div class="icon-item__img"><img src="assets/img/svg/2_love.svg" alt="icon" /></div>
+                        <div class="icon-item__text">
+                            <p>Simplesmente, Amor</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- OBJETIVOS FINAL -->
+
+    <!-- SOBRE NÓS -->
+    <section class="section about-us background--brown">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="heading heading--primary"><span class="heading__pre-title">História</span>
+                        <h2 class="heading__title"><span>Por que</span> <span> a Vaquinha Animal surgiu?</span></h2>
+                    </div>
+                    <p style="text-align: justify;"><strong>Uma plataforma voltada a ajudar e prover qualidade de vida aos nossos amigos pets.</strong></p>
+                    <p style="text-align: justify;">Muitas vezes, temos a vontade de ajudar, mas não sabemos como e se podemos confiar. Nesse intuito nasce a Vaquinha Animal.</p>
+                    <p style="text-align: justify;">Com campanhas importantes e com credibilidade, ajudaremos os tutores em seus custos para manter a saúde de seu animal. Damos o nosso máximo para garantir campanhas 100% reais.</p>
+                </div>
+                <div class="col-lg-6 col-xl-5 offset-xl-1">
+                    <div class="info-box"><img class="img--bg" src="assets/img/become_volounteer.jpg" alt="img" />
+                        <h4 class="info-box__title">Vamos mudar a vida de muito PET</h4>
+                        <p>Nem sempre podemos doar muito do que temos, muitas vezes amor já é o bastante, mas se nos juntarmos para dar um pouco para uma causa, podemos tratar muitos PETS e dar uma boa vida para nossos amigos.</p><a class="info-box__link"
+                            [routerLink]="['/campanhas/listar-todas']" style="font-size: 18px;">Eu quero ajudar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- SOBRE NÓS FINAL -->
+
+    <!-- NOSSO BLOG-->
+    <!-- <section class="section blog blog--front_3"><img class="blog__bg" src="assets/img/blog_bg-2.png" alt="img"/>
+    <div class="container">
+      <div class="row margin-bottom">
+        <div class="col-12">
+          <div class="heading heading--primary heading--center"><span class="heading__pre-title">Artigos</span>
+            <h2 class="heading__title no-margin-bottom"><span>Nosso</span> <span>Blog</span></h2>
+          </div>
+        </div>
+      </div>
+      <div class="row offset-margin">
+        <div class="col-md-6 col-xl-4">
+          <div class="blog-item blog-item--style-1">
+            <div class="blog-item__img"><img class="img--bg" src="assets/img/blog_1.jpg" alt="img"/><span class="blog-item__badge" style="background-color: #49C2DF;">Water Delivery</span></div>
+            <div class="blog-item__content">
+              <h6 class="blog-item__title"><a href="#">Save the Children's Role in Fight Against Malnutrition Hailed</a></h6>
+              <p>Sharksucker sea toad candiru rocket danio tilefish stingray deepwater stingray Sacramento splittail canthigaster</p>
+              <div class="blog-item__details"><span class="blog-item__date">23 Jan' 19</span><span>
+                <svg class="icon">
+                  <use xlink:href="#comment"></use>
+                </svg> 501</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="blog-item blog-item--style-1">
+              <div class="blog-item__img"><img class="img--bg" src="assets/img/blog_4.png" alt="img"/><span class="blog-item__badge" style="background-color: #F36F8F;">Medicine</span></div>
+              <div class="blog-item__content">
+                <h6 class="blog-item__title"><a href="#">Save the Children's Role in Fight Against Malnutrition Hailed</a></h6>
+                <p>Sharksucker sea toad candiru rocket danio tilefish stingray deepwater stingray Sacramento splittail canthigaster</p>
+                <div class="blog-item__details"><span class="blog-item__date">23 Jan' 19</span><span>
+                  <svg class="icon">
+                    <use xlink:href="#comment"></use>
+                  </svg> 501</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-4">
+              <div class="blog-item blog-item--style-1">
+                <div class="blog-item__img"><img class="img--bg" src="assets/img/blog_7.jpg" alt="img"/><span class="blog-item__badge" style="background-color: #F8AC3A;">Food</span></div>
+                <div class="blog-item__content">
+                  <h6 class="blog-item__title"><a href="blog-post.html">Back to the future: Quality education through respect, </a></h6>
+                  <p>Sharksucker sea toad candiru rocket danio tilefish stingray deepwater stingray Sacramento splittail canthigaster</p>
+                  <div class="blog-item__details"><span class="blog-item__date">23 Jan' 19</span><span>
+                    <svg class="icon">
+                      <use xlink:href="#comment"></use>
+                    </svg> 5</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  </section> -->
+    <!-- NOSSO BLOG FINAL -->
+
+    <!-- PARCEIROS -->
+    <section class="section donors donors--style-2 no-padding-bottom" style="margin-bottom: 80px;">
+        <div class="container">
+            <div class="row margin-bottom">
+                <div class="col-12">
+                    <div class="heading heading--primary heading--center"><span class="heading__pre-title">Colaboração</span>
+                        <h2 class="heading__title no-margin-bottom"><span>Nossos</span> <span>Parceiros</span></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <!-- donors slider start-->
+                    <div class="slider-holder">
+                        <div class="donors-slider donors-slider--style-1">
+                            <div class="donors-slider__item">
+                                <div class="donors-slider__img">
+                                    <a href="https://www.doadoresespeciais.com.br" target="_blank"><img style="max-height: 150px;" src="assets/img/donor_2.png" alt="donor" /></a>
+                                </div>
+                            </div>
+                            <div class="donors-slider__item">
+                                <div class="donors-slider__img">
+                                    <a href="https://www.instagram.com/abracoanimal" target="_blank"><img src="assets/img/donor_3.png" height="150px" alt="donor" /></a>
+                                </div>
+                            </div>
+                            <div class="donors-slider__item">
+                                <div class="donors-slider__img">
+                                    <a href="https://www.instagram.com/casadosanjos" target="_blank"><img src="assets/img/logomarca_casa_dos_anjos.png" height="120px" alt="donor" /></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- donors slider end-->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- PARCEIROS FINAL -->
+
+    <!-- FOTO BACKGROUND -->
+    <section class="bottom-background">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="bottom-background__img"><img src="assets/img/bottom-bg.png" alt="img" /></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- FOTO BACKGROUND FINAL -->
+</main>

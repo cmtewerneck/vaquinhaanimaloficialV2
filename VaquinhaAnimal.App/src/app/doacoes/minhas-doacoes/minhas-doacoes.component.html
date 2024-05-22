@@ -1,0 +1,82 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+    <!-- MINHAS DOACOES-->
+    <section class="section causes-inner" style="padding-top: 100px;">
+        <h2 class="heading__title" style="text-align: center; margin-bottom: 60px;"><span>Minhas</span> <span> Doações</span></h2>
+
+        <div class="container">
+
+            <!-- INÍCIO TABELA -->
+            <div class="table-responsive">
+                <table class="table table-striped" *ngIf="doacoesPaginado && doacoesPaginado.data.length">
+                    <thead>
+                        <tr>
+                            <th scope="col">Valor</th>
+                            <th scope="col">Campanha</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Método</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" style="text-align: center;">Imprimir</th>
+                            <th scope="col" style="text-align: center;">Comprovante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let doacao of doacoesPaginado.data">
+                            <td>{{ doacao.valor | currency }}</td>
+                            <td>{{ doacao.campanha.titulo }}</td>
+                            <td>{{ doacao.data | date: 'dd/MM/yyyy' }}</td>
+                            <td>{{ doacao.forma_pagamento | formaPagamento }}</td>
+                            <td>{{ doacao.status | statusDoacao }}</td>
+                            <td style="text-align: center;"><a href={{doacao.url_download}} target="_blank"><i class="fa-solid fa-download" style="cursor: pointer;" *ngIf="doacao.forma_pagamento == 'boleto' && doacao.status != 'paid'"></i></a></td>
+                            <td style="text-align: center;"><a (click)="exportToPdf(doacao.id)"><i class="fa-solid fa-download" style="cursor: pointer;" *ngIf="doacao.status == 'paid'"></i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- FIM TABELA -->
+
+            <div *ngIf="!doacoesPaginado || doacoesPaginado.data.length == 0" style="text-align: center;">
+                <img src="assets/img/topo_minhas_campanhas.png" width="600px" alt="donor" style="margin-bottom: 40px;" />
+
+                <h5 style="text-align: center;">Você não possui doações até o momento!</h5>
+                <a [routerLink]="['/campanhas/listar-todas']" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Procurar campanha pra doar</a>
+            </div>
+
+            <!-- PAGINADOR -->
+            <div class="container" *ngIf="doacoesPaginado && doacoesPaginado.data && doacoesPaginado.data.length != 0">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- pagination start-->
+                        <ul class="pagination">
+                            <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--prev" (click)="previousOrNext('previous')"><i class="fa fa-angle-left" aria-hidden="true"></i><span>Página Anterior</span></li>
+
+                            <div *ngFor="let i of paginasPaginador">
+                                <li class="pagination__item" [ngClass]="{ 'pagination__item--active': pageNumber == i}" (click)="pageChanged(i)"><span>{{i}}</span></li>
+                            </div>
+
+                            <li *ngIf="numeroPaginas > 1" class="pagination__item pagination__item--next" (click)="previousOrNext('next')"><span>Próxima Página</span><i class="fa fa-angle-right" aria-hidden="true"></i></li>
+                        </ul>
+                        <!-- pagination end-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!--MINHAS DOACOES END-->
+
+    <!-- bottom bg start-->
+    <section class="bottom-background background--brown">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="bottom-background__img"><img src="assets/img/bottom-bg.png" alt="img" /></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- bottom bg end-->
+</main>
