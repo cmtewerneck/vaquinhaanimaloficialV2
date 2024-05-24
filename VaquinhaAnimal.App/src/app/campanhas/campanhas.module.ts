@@ -52,6 +52,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     NgxMaskDirective,
     NgxMaskPipe,
     CurrencyMaskModule,
+    ModalModule.forRoot(),
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-bottom-right',
